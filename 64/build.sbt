@@ -16,7 +16,6 @@ lazy val root = (project in file("."))
       "com.github.julien-truffaut" %% "monocle-macro" % "3.0.0-M3"
     ),
     maxErrors := 5,
-
-  )
+  ).enablePlugins(SbtTwirl)
 
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
