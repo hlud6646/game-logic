@@ -117,3 +117,6 @@ Woods -> Design? Dev?
 
 ## Todos.
 - Look at other pencil and paper games for inspiration in drafting metarules.
+- Mockup some board visualisations; 
+- design rule generation (pen and paper);
+- implement sketch of rule generation;

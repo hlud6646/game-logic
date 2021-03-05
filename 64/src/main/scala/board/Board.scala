@@ -37,6 +37,12 @@ case class Board(regions: List[Region]) {
     val (x, rest) = regions.splitAt(2)
     Board( x.reduce(Semigroup[Region].combine) :: rest )
   }
+
+  /* Although the state of the board is most logically stored internally by region, 
+   * for the sake of actually rendering the board in html there must be a grid of 
+   * squares.
+   */
+  def toSquares = Vector[Vector[Square]] = ???
 }
 object Board {
   // will eventually be removed and set to 8 everywhere.

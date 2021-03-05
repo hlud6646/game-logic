@@ -51,6 +51,6 @@ object Main extends App {
 
   val title = "some page"
   val greeting = "ola"
-  val page: play.twirl.api.Html = html.boardTemplate(title, greeting)
+  val page: play.twirl.api.Html = html.demoTemplate(title, greeting)
 
 }
