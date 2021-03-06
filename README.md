@@ -1,5 +1,51 @@
 **64**
 
+Ramble from today (6/3/21)
+
+Try to collect a heap of actions (ask around) and then try to abstract.
+- Move a counter from a region to an adjacent region.
+- Draw a line from one region to another.
+- Draw a dot on a line.
+- Rotate a token.
+- Change the color of a square.
+- Swap two sqaures.
+- Move a monkey along a line.
+- Join two regions and color the union red.
+- Join two regions with a line which doesn't cross any other lines.
+
+Let the tokens be Monkey, Elephant, Rat and Amoeba.
+There should always be an implicit Ordering (or is it Ordered or something else?) so that 
+things like scissors paper rock work. 
+
+Since players alternate moving first in a match of 6 games, they can have different actions.
+(Think fox and the hounds). This means that the inital board doesn't actually have to be that 
+symmetrical. Left right symmetry will still be an aesthetic plus though.
+On this note, gotta figure out the scoring. Probs need to wait till the end of the match 
+and then call the winner, and calculate elo delta based on score.
+
+Tokens can have a NESW orientation; that way an action might be to rotate a token.
+
+Triggers/callbacks to make things happen. E.g. 
+Action: Move a token to another square.
+Callback: If the destination already contains a token, delete it.
+In other words, 'take a piece.'  Another example, steering towards Conway's GOL 
+might be 'If a monkey is placed next to an elephant, it dies.' Probabaly these 
+cutesy things (elephants can stomp on monkeys) should be built in.
+Amoebas can mess with any other animal.
+Rats can escape anything except amoebas.
+Elephants can stomp rats. 
+Nothing but an amoeba can even see an amoeba.
+
+type Links = List[Link] extends Property (will not compile)
+case class Link(
+  to: Region
+  dotted: Boolean (for Sprouts like games)
+  ??? anything else that a line could exhibit?
+)
+
+
+
+
 ## Introduction / Concept.
 A two player game, where the board layout and rules are randomly generated.
 The game functions like online chess, with players taking turns to make a 
