@@ -50,7 +50,7 @@ case class Link(
 A two player game, where the board layout and rules are randomly generated.
 The game functions like online chess, with players taking turns to make a 
 move on a square board.  A win buffs a player's ELO, a loss decreases it.
-The game should include (as possible (albeit unlikely) realisations of rng rule sets)
+The game should include (as possible (albeit unlikely) realisations of rule sets)
 - The fox and the hounds;
 - Checkers;
 - A simplified backgammon; 
@@ -163,3 +163,6 @@ Woods -> Design? Dev?
 
 ## Todos.
 - Look at other pencil and paper games for inspiration in drafting metarules.
+- Mockup some board visualisations; 
+- design rule generation (pen and paper);
+- implement sketch of rule generation;

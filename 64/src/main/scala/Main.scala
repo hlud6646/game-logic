@@ -20,9 +20,9 @@ object Main extends App {
    * as in the last line here will produde the board.
    */
 
-  val square = Square(1, 2)
+  val squares = Square(1, 2) :: Nil
   val data   = Data(Red, Tokens(List('x)))
-  val r1     = Region(square :: Nil, data)
+  val r1     = Region(squares, data)
 
   val r2 = Region( 
     Square(1, 3) :: Square(1, 4) :: Nil, 
@@ -56,7 +56,7 @@ object Main extends App {
 
   val title = "some page"
   val greeting = "ola"
-  val page: play.twirl.api.Html = html.boardTemplate(title, greeting)
+  val page: play.twirl.api.Html = html.demoTemplate(title, greeting)
 
 
 

@@ -28,6 +28,7 @@ case class Board(regions: List[Region]) {
     .andThen(Focus[Region](_.data.tokens))
     .modify(_.add('x))
 
+  def toSquares = Vector[Vector[Square]] = ???
 }
 object Board {
   
