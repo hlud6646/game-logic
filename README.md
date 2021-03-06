@@ -66,12 +66,12 @@ blink green to notify the players that this has occured.
 The board starts as an (uncoloured) 8x8 grid.
 It is then messed with according to some combination of the following transformations:
 B1: Regions are coloured using up to 4 colours;
-B2: Rejions are joined (effectively reducing the size of the board);
-B3: Edges are joined; 
+B2: Regions are joined (effectively reducing the size of the board);
+B3: Edges are associated; 
 B4: Regions are blacked out (effectively removed);
 B5: PLacing movable counters on the board;
 (Question: Are these operations commutative?)
-In a nod to chess, we require that the board be vertically symmetrical at the start of the game.
+Since this is not chess, squares indicies are zero indexed.
 
 ### Action
 Then the 'action' is decided. That is, what is the atomic change of state that 

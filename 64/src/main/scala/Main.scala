@@ -2,6 +2,7 @@
 package board 
 
 import Region._
+import Transformations._
 import Monoids._
 import cats.Monoid
 import cats.syntax.semigroup._
@@ -32,11 +33,15 @@ object Main extends App {
   r1 |+| r2
 
   // Chaining transformations
-  Board().checker.colorCorner.putToken.joinOnce 
+  val b = Board.fromChain(List(
+    symD(color(Red)),
+    symD(join))
+  )
 
+  b foreach println
 
-
-
+  // val b = gcapBoard()
+  // symD(color(Red))(Board()) 
 
 
 
@@ -52,5 +57,10 @@ object Main extends App {
   val title = "some page"
   val greeting = "ola"
   val page: play.twirl.api.Html = html.boardTemplate(title, greeting)
+
+
+
+
+
 
 }

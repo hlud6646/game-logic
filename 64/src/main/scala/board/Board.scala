@@ -8,6 +8,7 @@ import monocle.macros.syntax.all._
 import Data._
 import Region._
 import Monoids._
+import Transformations.{ T1, T2 }
 
 case class Board(regions: List[Region]) {
   // Utils
@@ -15,12 +16,6 @@ case class Board(regions: List[Region]) {
   def foreach(f: Region => Unit) = regions foreach f
   def reverse = Board(regions.reverse)
   def sym(f: Board => Board): (Board => Board) = ??? 
-
-  // Transformations.
-  def colorCorner = this.focus(_.regions)
-    .index(0)
-    .andThen(Focus[Region](_.data.color))
-    .replace(Red)
 
   def checker = Board(
     regions.zip(0 until regions.size) map { case (r, i) => 
@@ -33,18 +28,18 @@ case class Board(regions: List[Region]) {
     .andThen(Focus[Region](_.data.tokens))
     .modify(_.add('x))
 
-  def joinOnce = {
-    val (x, rest) = regions.splitAt(2)
-    Board( x.reduce(Semigroup[Region].combine) :: rest )
-  }
 }
 object Board {
+  
+  def fromChain(chain: List[T1]) = chain.reduce((f, g) => f.andThen(g))(Board())
+
+
   // will eventually be removed and set to 8 everywhere.
-  val N = 3
+  val devSize = 8
   def apply(r: List[Region]) = new Board(r)
   // Clean board. 
   def apply() = {
-    val r = for {x <- 1 to N; y <- 1 to N} yield Region(Square(x, y))
+    val r = for {x <- 0 until devSize; y <- 0 until devSize} yield Region(Square(x, y))
     new Board(r.toList)
   }
 }
