@@ -3,16 +3,14 @@ package board
 
 import Region._
 import Transformations._
-import Monoids._
+import ColorInstances._
+
 import cats.Monoid
 import cats.syntax.semigroup._
 import monocle.Focus
 import monocle.macros.syntax.all._
 
 object Main extends App {
-
-
-
 
   /* Here's a small sandbox that demonstrates creating squares, regions and boards.
    * Note the syntax for combining regions (using cats semigroup syntax) and the 
@@ -21,12 +19,12 @@ object Main extends App {
    */
 
   val squares = Square(1, 2) :: Nil
-  val data   = Data(Red, Tokens(List('x)))
+  val data   = Data(Red, Tokens(List(Token('A, 0))), Seq[Line]())
   val r1     = Region(squares, data)
 
   val r2 = Region( 
     Square(1, 3) :: Square(1, 4) :: Nil, 
-    Data( White, Tokens(List('o)) )
+    Data( White, Tokens(Nil), Seq[Line]())
   )
 
   // Combining regions :)
@@ -37,11 +35,7 @@ object Main extends App {
     symD(color(Red)),
     symD(join))
   )
-
-  b foreach println
-
-  // val b = gcapBoard()
-  // symD(color(Red))(Board()) 
+  
 
 
 
@@ -57,8 +51,6 @@ object Main extends App {
   val title = "some page"
   val greeting = "ola"
   val page: play.twirl.api.Html = html.demoTemplate(title, greeting)
-
-
 
 
 

@@ -7,3 +7,4 @@ package rules
  *  - Remove a token from a square;
  *  - Move a token from a square to another;
  */
+object Rules

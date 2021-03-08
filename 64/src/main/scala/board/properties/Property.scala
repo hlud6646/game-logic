@@ -1,3 +1,3 @@
-package properties
+package board
 
 trait Property
