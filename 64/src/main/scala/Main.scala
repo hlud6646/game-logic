@@ -1,4 +1,3 @@
-
 package board 
 
 import Region._
@@ -19,12 +18,20 @@ object Main extends App {
    */
 
   val squares = Square(1, 2) :: Nil
-  val data   = Data(Red, Tokens(List(Token('A, 0))), Seq[Line]())
-  val r1     = Region(squares, data)
+  val data = Data(
+    Red, 
+    List(Token('A, 0)), 
+    Seq[Line](), 
+    Alive)
+  val r1 = Region(squares, data)
 
   val r2 = Region( 
     Square(1, 3) :: Square(1, 4) :: Nil, 
-    Data( White, Tokens(Nil), Seq[Line]())
+    Data( 
+      White, 
+      Nil, 
+      Seq[Line](), 
+      Alive)
   )
 
   // Combining regions :)
@@ -33,7 +40,8 @@ object Main extends App {
   // Chaining transformations
   val b = Board.fromChain(List(
     symD(color(Red)),
-    symD(join))
+    symD(join),
+    place(Token('M, 0)))
   )
   
 
@@ -47,12 +55,19 @@ object Main extends App {
    * apply method, taking as arguments the content to inject into the template.
    * This, as a first step towards rendering a board.
    */
-
   val title = "some page"
   val greeting = "ola"
   val page: play.twirl.api.Html = html.demoTemplate(title, greeting)
 
 
 
+
+
+
+
+  /** Test out rendering a board.
+   */
+  b: Board
+  b.toRenderSquares foreach println
 
 }

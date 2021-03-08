@@ -28,4 +28,3 @@ sealed case class Token(animal: Symbol, orientation: Int) extends Property {
 object TokenOrdering extends Ordering[Token] {
   def compare(x: Token, y: Token) = ???
 }
-case class Tokens(data: List[Token])

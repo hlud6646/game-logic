@@ -1,6 +1,6 @@
 package board
 
-abstract class Color
+sealed trait Color extends Property
 case object White extends Color
 case object Red   extends Color
 case object Green extends Color
