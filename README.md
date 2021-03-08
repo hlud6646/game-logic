@@ -1,26 +1,5 @@
 **64**
 
-Ramble from today (6/3/21)
-
-Try to collect a heap of actions (ask around) and then try to abstract.
-
-Since players alternate moving first in a match of 6 games, they can have different actions.
-(Think fox and the hounds). This means that the inital board doesn't actually have to be that 
-symmetrical. Left right symmetry will still be an aesthetic plus though.
-On this note, gotta figure out the scoring. Probs need to wait till the end of the match 
-and then call the winner, and calculate elo delta based on score.
-
-Triggers/callbacks to make things happen. E.g. 
-Action: Move a token to another square.
-Callback: If the destination already contains a token, delete it.
-In other words, 'take a piece.'  Another example, steering towards Conway's GOL 
-might be 'If a monkey is placed next to an elephant, it dies.' Probabaly these 
-cutesy things (elephants can stomp on monkeys) should be built in.
-Amoebas can mess with any other animal.
-Rats can escape anything except amoebas.
-Elephants can stomp rats. 
-Nothing but an amoeba can even see an amoeba.
-
 ## Introduction / Concept.
 A two player game, where the board layout and rules are randomly generated.
 The game functions like online chess, with players taking turns to make a 
@@ -49,6 +28,23 @@ A player's ELO (or similar scoring system) is updated at the end of a match.
 ## Implementation.
 Since the idea basically came up in the hunt for a meaningful Scala project for learning, 
 Scala + Play will be the backend. Not sure yet for the front, mobile version etc.
+
+Since players alternate moving first in a match of 6 games, they can have different actions.
+(Think fox and the hounds). This means that the inital board doesn't actually have to be that 
+symmetrical. Left right symmetry will still be an aesthetic plus though.
+On this note, gotta figure out the scoring. Probs need to wait till the end of the match 
+and then call the winner, and calculate elo delta based on score.
+
+Triggers/callbacks to make things happen. E.g. 
+Action: Move a token to another square.
+Callback: If the destination already contains a token, delete it.
+In other words, 'take a piece.'  Another example, steering towards Conway's GOL 
+might be 'If a monkey is placed next to an elephant, it dies.' Probabaly these 
+cutesy things (elephants can stomp on monkeys) should be built in.
+Amoebas can mess with any other animal.
+Rats can escape anything except amoebas.
+Elephants can stomp rats. 
+Nothing but an amoeba can even see an amoeba.
 
 ## UX.
 ### Color. 
