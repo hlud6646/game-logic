@@ -1,0 +1,36 @@
+@import board.RenderSquare
+
+@(
+  stuff: Seq[Seq[RenderSquare]]
+)
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Board.</title>
+    <style>
+      body {
+        background-color: black
+      }
+      table, th, td {
+        border: 1px solid pink;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+    @for(row <- stuff) {
+    <tr>
+      @for(s <- row) {
+      <td style="background-color: @s.color" width="100" height="100" align="center">
+          @s.tokens.map(_.animal)
+        </td>
+      }
+    </tr>
+    }
+    </table>
+  </body>
+</html>

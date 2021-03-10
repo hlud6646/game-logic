@@ -22,7 +22,7 @@ package board
  * rotations from vertical.
  */
 
-sealed case class Token(animal: Symbol, orientation: Int) extends Property {
+sealed case class Token(animal: String, orientation: Int) extends Property {
   def rotate(n: Int) = Token(animal, (orientation + n) % 4)
 }
 object TokenOrdering extends Ordering[Token] {

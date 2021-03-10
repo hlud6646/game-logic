@@ -28,8 +28,8 @@ object Transformations {
   type T2 = T1 => T1
 
   // Transformations involving color property;
-  def color(c: Color)(b: Board) =
-    b.focus(_.regions).index(0)
+  def color(c: Color, idx: Int = 0)(b: Board) =
+    b.focus(_.regions).index(idx)
      .andThen(Focus[Region](_.data.color))
      .replace(c)
 
@@ -51,8 +51,8 @@ object Transformations {
   def killCenter(b: Board) = ???
 
   // Involving Tokens
-  def place(t: Token)(b: Board) = 
-    b.focus(_.regions).index(1)
+  def place(t: Token, idx: Int = 0)(b: Board) = 
+    b.focus(_.regions).index(idx)
     .andThen(Focus[Region](_.data.tokens))
     .modify(_.appended(t))
 
