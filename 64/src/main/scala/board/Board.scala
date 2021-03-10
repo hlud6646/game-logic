@@ -17,6 +17,7 @@ case class Board(regions: List[Region]) {
     .flatMap(_.toRenderSquares)
     .sortBy(s => (s.x, s.y))
     .sliding(8, 8)
+    .toSeq
 }
 object Board {
   

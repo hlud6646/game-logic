@@ -10,5 +10,6 @@ case class RenderSquare(
   y:      Int, 
   color:  Color, 
   tokens: Seq[Token]  = Nil,
-  lines:  Seq[Line]   = Nil
+  lines:  Seq[Line]   = Nil, 
+  living: Living
 )

@@ -6,6 +6,7 @@ import ColorInstances._
 
 import cats.Monoid
 import cats.syntax.semigroup._
+import java.io._
 import monocle.Focus
 import monocle.macros.syntax.all._
 
@@ -20,7 +21,7 @@ object Main extends App {
   val squares = Square(1, 2) :: Nil
   val data = Data(
     Red, 
-    List(Token('A, 0)), 
+    List(Token("A", 0)), 
     Seq[Line](), 
     Alive)
   val r1 = Region(squares, data)
@@ -38,10 +39,16 @@ object Main extends App {
   r1 |+| r2
 
   // Chaining transformations
-  val b = Board.fromChain(List(
-    symD(color(Red)),
-    symD(join),
-    place(Token('M, 0)))
+  val b = Board.fromChain(List
+    (
+      killCenter,
+      symD(killSquare(3)),
+      join,
+      symD(color(Red)),
+      symD(join),
+      place(Token("M", 0), 2), 
+      symD(color(Blue, 5)),
+    )
   )
   
 
@@ -61,13 +68,24 @@ object Main extends App {
 
 
 
+  
 
 
 
 
   /** Test out rendering a board.
+   *  Not jumping the gun here (front end is a way off), but I'd rather look at a board
+   *  than a terminal while experimenting with board creation routines.
    */
-  b: Board
-  b.toRenderSquares foreach println
+  val file = new File("/home/erg/board.html")
+  val bw = new BufferedWriter(new FileWriter(file))
+  bw.write(html.boardTemplate(b.toRenderSquares).body)
+  bw.close()
+
+
+
+
+
+
 
 }

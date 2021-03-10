@@ -28,10 +28,16 @@ object Transformations {
   type T2 = T1 => T1
 
   // Transformations involving color property;
+<<<<<<< HEAD
+  def color(c: Color)(b: Board) =
+    b.focus(_.regions).index(0)
+     .andThen(Focus[Region](_.data.color)).replace(c)
+=======
   def color(c: Color, idx: Int = 0)(b: Board) =
     b.focus(_.regions).index(idx)
      .andThen(Focus[Region](_.data.color))
      .replace(c)
+>>>>>>> 1ab78ef87a8a8a23f986bfb49b67785e6ebe02a8
 
   def checker(b: Board) = ???
 
@@ -48,10 +54,8 @@ object Transformations {
 
   // Involving Living property.
   def killSquare(idx: Int)(b: Board) =
-    b.focus(_.regions).index(idx)
-     .andThen(Focus[Region](_.data.living)).replace(Dead)
-  def killCenter(b: Board) = 
-    Seq(27, 28, 35, 36).map{ i => killSquare(i)(_)}.reduce(_ andThen _)(b)
+    b.focus(_.regions).index(idx).andThen(Focus[Region](_.data.living)).replace(Dead)
+  def killCenter(b: Board) = (30 to 33).map{ i => killSquare(i)(_)}.reduce(_ andThen _)
 
   // Involving Tokens
   def place(t: Token, idx: Int = 0)(b: Board) = 

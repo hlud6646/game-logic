@@ -14,8 +14,15 @@ case class Region(squares: List[Square], data: Data) {
       h.y,
       data.color,
       data.tokens,
-      data.lines)
-    val rest = squares.tail.map {case Square(x, y) => RenderSquare(x, y, data.color)}
+      data.lines, 
+      data.living)
+    val rest = squares.tail.map {case Square(x, y) => RenderSquare(
+      x, 
+      y, 
+      data.color, 
+      List[Token](),
+      List[Line](),
+      data.living)}
     s :: rest
   }
 

@@ -23,7 +23,7 @@ package board
  */
 
 sealed case class Token(
-  animal: String, 
+  animal: Symbol, 
   orientation: Int, 
   owner: Option[Player] = None) 
 extends Property {
