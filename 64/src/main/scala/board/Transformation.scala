@@ -30,8 +30,7 @@ object Transformations {
   // Transformations involving color property;
   def color(c: Color)(b: Board) =
     b.focus(_.regions).index(0)
-     .andThen(Focus[Region](_.data.color))
-     .replace(c)
+     .andThen(Focus[Region](_.data.color)).replace(c)
 
   def checker(b: Board) = ???
 
@@ -47,8 +46,9 @@ object Transformations {
   }
 
   // Involving Living property.
-  def killSquare(b: Board) = ???
-  def killCenter(b: Board) = ???
+  def killSquare(idx: Int)(b: Board) =
+    b.focus(_.regions).index(idx).andThen(Focus[Region](_.data.living)).replace(Dead)
+  def killCenter(b: Board) = (30 to 33).map{ i => killSquare(i)(_)}.reduce(_ andThen _)
 
   // Involving Tokens
   def place(t: Token)(b: Board) = 

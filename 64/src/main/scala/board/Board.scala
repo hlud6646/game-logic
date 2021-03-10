@@ -21,7 +21,7 @@ case class Board(regions: List[Region]) {
 object Board {
   
   // main method of this module.
-  def fromChain(chain: List[Board => Board]) = chain.reduce((f, g) => f.andThen(g))(Board())
+  def fromChain(chain: List[Board => Board]) = chain.reduce(_ andThen _)(Board())
   def apply(r: List[Region]) = new Board(r)
   // Clean board. 
   def apply() = {
