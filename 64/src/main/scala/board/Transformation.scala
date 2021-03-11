@@ -72,4 +72,8 @@ object Transformations {
   def symD(f: T1) = sym(reflectD)(f)
   def symH(f: T1) = sym(reflectH)(f)
   def symV(f: T1) = sym(reflectV)(f)
+  
+  // Repeat a transformation that takes one integer parameter.
+  def repeat(nTimes: Int, startIndex: Int, step: Int)(f: Int => T1) =
+    (0 until nTimes) map {_ + startIndex} map {_ * step} map f reduce {_ andThen _}
 }

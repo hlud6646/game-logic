@@ -43,11 +43,11 @@ object Main extends App {
     (
       killCenter,
       symD(killSquare(3)),
-      join,
-      symD(color(Red)),
-      symD(join),
-      place(Token("M", 0), 2), 
       symD(color(Blue, 5)),
+      symD(color(Red)),
+      place(Token("M", 0), 2), 
+      repeat(nTimes=4, startIndex=28, step=2)(place(Token("A", 0), _)),
+      symD(join),
     )
   )
   
