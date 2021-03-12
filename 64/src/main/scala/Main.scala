@@ -50,14 +50,18 @@ object Main extends App {
     symD(join),
   ))
 
-
   // Fox and the hounds.
-  val b = Board.fromChain(List(
+  Board.fromChain(List(
     checker,
     repeat(nTimes=4, startIndex=57, step=2)(place(Token("A", 0), _)),
     place(Token("E", 0), 4),
   ))
-  
+ 
+  val b = Board.fromChain(List(
+    colorByModulus(4, Red),
+    reverse, 
+    colorByModulus(4, Blue),
+  ))
 
 
 
@@ -73,9 +77,6 @@ object Main extends App {
   val greeting = "ola"
   val page: play.twirl.api.Html = html.demoTemplate(title, greeting)
 
-
-
-  
 
 
 
@@ -99,17 +100,39 @@ object Main extends App {
   
   trait Action
   trait Move
+  trait WinCondition
    
+  // This function generates a random board.
+  def createBoard: Option[Board] = ???
+
+  // Create a metric appropriate to the board.
+  def createAction(b: Board): Option[Action] = ???
+
+  // Create a metric that the action targets.
+  def createMetric(b: Board, a: Action): Option[Metric] = ???
+
+  def createWinCondition(a: Action, m: Metric): Option[WinCondition] = ???
+
+  // word 'Game' somewhat overloaded...
   case class Game(
     board: Board, 
     action: Action, 
     metric: Metric, 
+    winCondition: WinCondition,
     activePlayer: Player) {
-    def gameOver: Boolean = board satisfies metric
+    def gameOver: Boolean = ???
     def winner: Option[Player] = Option.when(gameOver)(activePlayer)
     def loser = winner map {_.otherPlayer}
     def canMove: Boolean = ???
     def enact(m: Move) = ???
+  }
+  object Game {
+    def create: Option[Game] = for {
+      board     	 <- createBoard
+      action    	 <- createAction(board)
+      metric    	 <- createMetric(board, action) 
+      winCondition <- createWinCondition(action, metric)
+    } yield Game(board, action, metric, winCondition, Player.P1)
   }
 
 }

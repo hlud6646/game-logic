@@ -37,12 +37,14 @@ object Transformations {
   def stripes(b: Board) = 
     repeat(nTimes=32, startIndex=0, step=2)(color(Red, _))(b)
 
-  def checker(b: Board) = Board(
+  def checker(b: Board) = colorByModulus(2, Red)(b)
+
+  def colorByModulus(m: Int, c: Color)(b: Board) = Board(
     (b.regions zip (0 to b.regions.size))
     .map {case (r, i) => 
-      if ((i + i/8)%2 == 0) r 
-      else r.focus(_.data.color).replace(Red)
-    })
+      if ((i + i/8)%m == 0) r
+      else r.focus(_.data.color).replace(c)
+  })
 
   // Involving joining regions;
   def join(b: Board) = {
@@ -68,8 +70,10 @@ object Transformations {
     .andThen(Focus[Region](_.data.tokens))
     .modify(_.appended(t))
 
+
   // Diagonal, Horizontal and Vertical reflections.
-  def reflectD(b: Board) = Board(b.regions.reverse)
+  def reverse(b: Board)  = Board(b.regions.reverse)
+  def reflectD(b: Board) = reverse(b)
   def reflectH(b: Board) = ???
   def reflectV(b: Board) = ???
 
