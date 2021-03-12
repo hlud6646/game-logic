@@ -86,6 +86,23 @@ object Main extends App {
 
 
 
-
+  /** A very rough sketch.
+   */
+  import rules.Metric
+  
+  trait Action
+  trait Move
+   
+  case class Game(
+    board: Board, 
+    action: Action, 
+    metric: Metric, 
+    activePlayer: Player) {
+    def gameOver: Boolean = board satisfies metric
+    def winner: Option[Player] = Option.when(gameOver)(activePlayer)
+    def loser = winner map {_.otherPlayer}
+    def canMove: Boolean = ???
+    def enact(m: Move) = ???
+  }
 
 }

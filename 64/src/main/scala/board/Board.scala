@@ -7,6 +7,7 @@ import monocle.macros.syntax.all._
 
 import Data._
 import Region._
+import rules.Metric
 
 case class Board(regions: List[Region]) {
   override def toString = regions.toString
@@ -18,13 +19,12 @@ case class Board(regions: List[Region]) {
     .sortBy(s => (s.x, s.y))
     .sliding(8, 8)
     .toSeq
+  def satisfies(m: Metric) = ???
 }
 object Board {
-  
-  // main method of this module.
+  // Constructors. 
   def fromChain(chain: List[Board => Board]) = chain.reduce(_ andThen _)(Board())
   def apply(r: List[Region]) = new Board(r)
-  // Clean board. 
   def apply() = {
     val r = for {x <- 0 until 8; y <- 0 until 8} yield Region(Square(x, y))
     new Board(r.toList)
