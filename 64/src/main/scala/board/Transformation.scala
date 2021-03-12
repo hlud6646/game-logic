@@ -34,8 +34,15 @@ object Transformations {
     b.focus(_.regions).index(idx)
      .andThen(Focus[Region](_.data.color))
      .replace(c)
+  def stripes(b: Board) = 
+    repeat(nTimes=32, startIndex=0, step=2)(color(Red, _))(b)
 
-  def checker(b: Board) = ???
+  def checker(b: Board) = Board(
+    (b.regions zip (0 to b.regions.size))
+    .map {case (r, i) => 
+      if ((i + i/8)%2 == 0) r 
+      else r.focus(_.data.color).replace(Red)
+    })
 
   // Involving joining regions;
   def join(b: Board) = {

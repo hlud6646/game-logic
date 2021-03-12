@@ -27,7 +27,7 @@
     <tr>
       @for(s <- row) {
       @if(s.living == Living.Dead) {<td/>} else {
-        <td style="background-color: @s.color" width="100" height="100" align="center">
+        <td style="background-color: @s.color" width="50" height="50" align="center">
           @s.tokens.map(_.animal)
         </td>
         }

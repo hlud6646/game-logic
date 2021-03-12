@@ -51,9 +51,11 @@ object Main extends App {
   ))
 
 
+  // Fox and the hounds.
   val b = Board.fromChain(List(
+    checker,
     repeat(nTimes=4, startIndex=57, step=2)(place(Token("A", 0), _)),
-    killCenter,  
+    place(Token("E", 0), 4),
   ))
   
 
