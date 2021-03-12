@@ -1,4 +1,5 @@
-@import board.RenderSquare
+@import board.{ RenderSquare, Living }
+@import board.Living._
 
 @(
   stuff: Seq[Seq[RenderSquare]]
@@ -25,10 +26,11 @@
     @for(row <- stuff) {
     <tr>
       @for(s <- row) {
-      <td style="background-color: @s.color" width="100" height="100" align="center">
-          @s.living </br>
+      @if(s.living == Living.Dead) {<td/>} else {
+        <td style="background-color: @s.color" width="100" height="100" align="center">
           @s.tokens.map(_.animal)
         </td>
+        }
       }
     </tr>
     }

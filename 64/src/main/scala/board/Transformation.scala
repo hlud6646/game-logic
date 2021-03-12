@@ -4,6 +4,8 @@ import cats.Semigroup
 import monocle.Focus
 import monocle.macros.syntax.all._
 
+import Living._
+
 
 /* Routines for generating interesting initial boards, eg
  *    - a checkerboard colorscheme;
@@ -75,5 +77,5 @@ object Transformations {
   
   // Repeat a transformation that takes one integer parameter.
   def repeat(nTimes: Int, startIndex: Int, step: Int)(f: Int => T1) =
-    (0 until nTimes) map {_ + startIndex} map {_ * step} map f reduce {_ andThen _}
+    (0 until nTimes) map {_ * step} map {_ + startIndex} map f reduce {_ andThen _}
 }
