@@ -75,7 +75,7 @@ object Transformations {
   // 90 deg clockwise.
   def rotate(b: Board) = ???
 
-  // Make a transformation f symmetrical across a given reflection r.
+  // Make a transformation symmetrical across an axis.
   def sym(r: T1)(f: T1) = f.andThen(r).andThen(f).andThen(r)
   def symD(f: T1) = sym(reflectD)(f)
   def symH(f: T1) = sym(reflectH)(f)
