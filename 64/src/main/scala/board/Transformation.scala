@@ -10,11 +10,6 @@ import Living._
 /* Routines for generating interesting initial boards, eg
  *    - a checkerboard colorscheme;
  *    - placing some initial tokens.
- * Most (all?) of the time, the board should be symmetrical across 
- * a long diagonal or the 'equator' of the board, so that both players
- * start from the same place (or nearly the same place as in chess). To
- * that end some helpers are defined which take a simple transformation 
- * and return one which preserves a particular symmetry.
  *
  * These are similar in effect to 'actions' (the alteration a player makes to 
  * the board on their turn) but different enough in intent to be defined 
