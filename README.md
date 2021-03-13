@@ -1,5 +1,24 @@
 **64**
 
+Better datatype for tokens is a Map[Square: Seq[Token]];
+Dots and lines need an owner; 
+Bit much, but do we need a game validation engine to check if games are good before 
+allowing players to begin?  If computationally gigantic that's still ok, since a stack of 
+preapproved games coud be built during quiet time.
+
+Game: Starting with weirdly grouped board, players join adjacent regions until no move is 
+available.
+Astraction: The action (join regions) monotonically decreases the metric (number of groups) until a certian value is reached (1).
+
+Remove any non game logic from the 64 repo and 
+Start structuring different repos; game logic, frontend, server, ... (reserve names)
+tests?
+go back to playing with randomly chosen semigroups -> write a (demo at least) Board.random method 
+rename living.scala to match object;
+methods/subclasses/objects in companion? whats the norm?
+let a regoin hold all the properties; no need for data bag. 
+shapeless for combining should be the combine one liner we are looking for.
+
 ## Introduction / Concept.
 A two player game, where the board layout and rules are randomly generated.
 The game functions like online chess, with players taking turns to make a 
