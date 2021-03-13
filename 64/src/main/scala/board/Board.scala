@@ -5,7 +5,6 @@ import cats.syntax.semigroup._
 import monocle.Focus
 import monocle.macros.syntax.all._
 
-import Data._
 import Region._
 import rules.Metric
 

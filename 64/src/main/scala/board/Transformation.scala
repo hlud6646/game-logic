@@ -27,7 +27,7 @@ object Transformations {
   // Transformations involving color property;
   def color(c: Color, idx: Int = 0)(b: Board) =
     b.focus(_.regions).index(idx)
-     .andThen(Focus[Region](_.data.color))
+     .andThen(Focus[Region](_.color))
      .replace(c)
   def stripes(b: Board) = 
     repeat(nTimes=32, startIndex=0, step=2)(color(Red, _))(b)
@@ -38,7 +38,7 @@ object Transformations {
     (b.regions zip (0 to b.regions.size))
     .map {case (r, i) => 
       if ((i + i/8)%m == 0) r
-      else r.focus(_.data.color).replace(c)
+      else r.focus(_.color).replace(c)
   })
 
   // Involving joining regions;
@@ -55,16 +55,16 @@ object Transformations {
   // Involving Living property.
   def killSquare(idx: Int)(b: Board) =
     b.focus(_.regions).index(idx)
-     .andThen(Focus[Region](_.data.living)).replace(Dead)
+     .andThen(Focus[Region](_.living)).replace(Dead)
   def killCenter(b: Board) = 
     Seq(27, 28, 35, 36).map{ i => killSquare(i)(_)}.reduce(_ andThen _)(b)
 
-  // Involving Tokens
-  def place(t: Token, idx: Int = 0)(b: Board) = 
-    b.focus(_.regions).index(idx)
-    .andThen(Focus[Region](_.data.tokens))
-    .modify(_.appended(t))
-
+  // // Involving Tokens
+  // def place(t: Token, idx: Int = 0)(b: Board) = 
+  //   b.focus(_.regions).index(idx)
+  //   .andThen(Focus[Region](_.data.tokens))
+  //   .modify(_.appended(t))
+  def place(t: Token, idx: Int = 0)(b: Board) = ???
 
   // Diagonal, Horizontal and Vertical reflections.
   def reverse(b: Board)  = Board(b.regions.reverse)

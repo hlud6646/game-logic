@@ -10,10 +10,11 @@ lazy val root = (project in file("."))
   .settings(
     name := "64",
     libraryDependencies ++= Seq(
-      scalaTest        % Test,
-      "org.typelevel" %% "cats-core" % "2.1.1",
-      "com.github.julien-truffaut" %% "monocle-core"  % "3.0.0-M3",
-      "com.github.julien-truffaut" %% "monocle-macro" % "3.0.0-M3"
+      scalaTest                     %  Test,
+      "org.typelevel"               %% "cats-core"        % "2.1.1",
+      "com.github.julien-truffaut"  %% "monocle-core"     % "3.0.0-M3",
+      "com.github.julien-truffaut"  %% "monocle-macro"    % "3.0.0-M3",
+      "eu.timepit"                  %% "refined"          % "0.9.21",
     ),
     maxErrors := 5,
   ).enablePlugins(SbtTwirl)

@@ -1,5 +1,8 @@
 **64**
-
+A note on metrics: these feel like a function Board -> some numerical type.
+This is too specific though. Maybe you want to declare the winner as the player 
+who is the first to kill 5 monkeys. This information is not obviously encodded on 
+the current state of the board.
 Better datatype for tokens is a Map[Square: Seq[Token]];
 Dots and lines need an owner; 
 Bit much, but do we need a game validation engine to check if games are good before 
