@@ -4,15 +4,12 @@ import cats.Semigroup
 import monocle.Focus
 import monocle.macros.syntax.all._
 
+import Living._
+
 
 /* Routines for generating interesting initial boards, eg
  *    - a checkerboard colorscheme;
  *    - placing some initial tokens.
- * Most (all?) of the time, the board should be symmetrical across 
- * a long diagonal or the 'equator' of the board, so that both players
- * start from the same place (or nearly the same place as in chess). To
- * that end some helpers are defined which take a simple transformation 
- * and return one which preserves a particular symmetry.
  *
  * These are similar in effect to 'actions' (the alteration a player makes to 
  * the board on their turn) but different enough in intent to be defined 
@@ -32,8 +29,17 @@ object Transformations {
     b.focus(_.regions).index(idx)
      .andThen(Focus[Region](_.data.color))
      .replace(c)
+  def stripes(b: Board) = 
+    repeat(nTimes=32, startIndex=0, step=2)(color(Red, _))(b)
 
-  def checker(b: Board) = ???
+  def checker(b: Board) = colorByModulus(2, Red)(b)
+
+  def colorByModulus(m: Int, c: Color)(b: Board) = Board(
+    (b.regions zip (0 to b.regions.size))
+    .map {case (r, i) => 
+      if ((i + i/8)%m == 0) r
+      else r.focus(_.data.color).replace(c)
+  })
 
   // Involving joining regions;
   def join(b: Board) = {
@@ -59,15 +65,17 @@ object Transformations {
     .andThen(Focus[Region](_.data.tokens))
     .modify(_.appended(t))
 
+
   // Diagonal, Horizontal and Vertical reflections.
-  def reflectD(b: Board) = Board(b.regions.reverse)
+  def reverse(b: Board)  = Board(b.regions.reverse)
+  def reflectD(b: Board) = reverse(b)
   def reflectH(b: Board) = ???
   def reflectV(b: Board) = ???
 
   // 90 deg clockwise.
   def rotate(b: Board) = ???
 
-  // Make a transformation f symmetrical across a given reflection r.
+  // Make a transformation symmetrical across an axis.
   def sym(r: T1)(f: T1) = f.andThen(r).andThen(f).andThen(r)
   def symD(f: T1) = sym(reflectD)(f)
   def symH(f: T1) = sym(reflectH)(f)
@@ -75,5 +83,5 @@ object Transformations {
   
   // Repeat a transformation that takes one integer parameter.
   def repeat(nTimes: Int, startIndex: Int, step: Int)(f: Int => T1) =
-    (0 until nTimes) map {_ + startIndex} map {_ * step} map f reduce {_ andThen _}
+    (0 until nTimes) map {_ * step + startIndex} map f reduce {_ andThen _}
 }

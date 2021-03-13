@@ -3,6 +3,8 @@ package board
 import cats.Monoid
 import util.Random
 
+import Living._
+
 object LivingInstances {
 
   val livingMonoid1 = new Monoid[Living] {

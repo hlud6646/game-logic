@@ -3,6 +3,7 @@ package board
 import Region._
 import Transformations._
 import ColorInstances._
+import Living._
 
 import cats.Monoid
 import cats.syntax.semigroup._
@@ -39,18 +40,28 @@ object Main extends App {
   r1 |+| r2
 
   // Chaining transformations
-  val b = Board.fromChain(List
-    (
-      killCenter,
-      symD(killSquare(3)),
-      symD(color(Blue, 5)),
-      symD(color(Red)),
-      place(Token("M", 0), 2), 
-      repeat(nTimes=4, startIndex=28, step=2)(place(Token("A", 0), _)),
-      symD(join),
-    )
-  )
-  
+  Board.fromChain(List(
+    killCenter,
+    symD(killSquare(3)),
+    symD(color(Blue, 5)),
+    symD(color(Red)),
+    place(Token("M", 0), 2), 
+    repeat(nTimes=4, startIndex=28, step=2)(place(Token("A", 0), _)),
+    symD(join),
+  ))
+
+  // Fox and the hounds.
+  Board.fromChain(List(
+    checker,
+    repeat(nTimes=4, startIndex=57, step=2)(place(Token("A", 0), _)),
+    place(Token("E", 0), 4),
+  ))
+ 
+  val b = Board.fromChain(List(
+    colorByModulus(4, Red),
+    reverse, 
+    colorByModulus(4, Blue),
+  ))
 
 
 
@@ -68,16 +79,13 @@ object Main extends App {
 
 
 
-  
-
-
 
 
   /** Test out rendering a board.
    *  Not jumping the gun here (front end is a way off), but I'd rather look at a board
    *  than a terminal while experimenting with board creation routines.
    */
-  val file = new File("/home/erg/board.html")
+  val file = new File("./board.html")
   val bw = new BufferedWriter(new FileWriter(file))
   bw.write(html.boardTemplate(b.toRenderSquares).body)
   bw.close()
@@ -92,17 +100,39 @@ object Main extends App {
   
   trait Action
   trait Move
+  trait WinCondition
    
+  // This function generates a random board.
+  def createBoard: Option[Board] = ???
+
+  // Create a metric appropriate to the board.
+  def createAction(b: Board): Option[Action] = ???
+
+  // Create a metric that the action targets.
+  def createMetric(b: Board, a: Action): Option[Metric] = ???
+
+  def createWinCondition(a: Action, m: Metric): Option[WinCondition] = ???
+
+  // word 'Game' somewhat overloaded...
   case class Game(
     board: Board, 
     action: Action, 
     metric: Metric, 
+    winCondition: WinCondition,
     activePlayer: Player) {
-    def gameOver: Boolean = board satisfies metric
+    def gameOver: Boolean = ???
     def winner: Option[Player] = Option.when(gameOver)(activePlayer)
     def loser = winner map {_.otherPlayer}
     def canMove: Boolean = ???
     def enact(m: Move) = ???
+  }
+  object Game {
+    def create: Option[Game] = for {
+      board     	 <- createBoard
+      action    	 <- createAction(board)
+      metric    	 <- createMetric(board, action) 
+      winCondition <- createWinCondition(action, metric)
+    } yield Game(board, action, metric, winCondition, Player.P1)
   }
 
 }
