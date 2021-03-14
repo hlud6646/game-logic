@@ -22,11 +22,11 @@ object Action {
   def rotate(token: Token, region: Region) = 
     remove(token, region, callback = put(token.rotate(1), region))
   
-  // Monkey swings along a vine.
-  val monkey = Token("M", 0)
-  def moveMonkey(from: Region, to: Region) =
-    if (!from.data.lines.contains(Line(to, false))) None
-    else remove(monkey, from, callback=put(monkey, to))
+  // // Monkey swings along a vine.
+  // val monkey = Token("M", 0)
+  // def moveMonkey(from: Region, to: Region) =
+  //   if (!from.lines.contains(Line(to, false))) None
+  //   else remove(monkey, from, callback=put(monkey, to))
 
 
 

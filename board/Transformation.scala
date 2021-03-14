@@ -10,11 +10,6 @@ import Living._
 /* Routines for generating interesting initial boards, eg
  *    - a checkerboard colorscheme;
  *    - placing some initial tokens.
- * Most (all?) of the time, the board should be symmetrical across 
- * a long diagonal or the 'equator' of the board, so that both players
- * start from the same place (or nearly the same place as in chess). To
- * that end some helpers are defined which take a simple transformation 
- * and return one which preserves a particular symmetry.
  *
  * These are similar in effect to 'actions' (the alteration a player makes to 
  * the board on their turn) but different enough in intent to be defined 
@@ -32,7 +27,7 @@ object Transformations {
   // Transformations involving color property;
   def color(c: Color, idx: Int = 0)(b: Board) =
     b.focus(_.regions).index(idx)
-     .andThen(Focus[Region](_.data.color))
+     .andThen(Focus[Region](_.color))
      .replace(c)
   def stripes(b: Board) = 
     repeat(nTimes=32, startIndex=0, step=2)(color(Red, _))(b)
@@ -43,7 +38,7 @@ object Transformations {
     (b.regions zip (0 to b.regions.size))
     .map {case (r, i) => 
       if ((i + i/8)%m == 0) r
-      else r.focus(_.data.color).replace(c)
+      else r.focus(_.color).replace(c)
   })
 
   // Involving joining regions;
@@ -60,16 +55,16 @@ object Transformations {
   // Involving Living property.
   def killSquare(idx: Int)(b: Board) =
     b.focus(_.regions).index(idx)
-     .andThen(Focus[Region](_.data.living)).replace(Dead)
+     .andThen(Focus[Region](_.living)).replace(Dead)
   def killCenter(b: Board) = 
     Seq(27, 28, 35, 36).map{ i => killSquare(i)(_)}.reduce(_ andThen _)(b)
 
-  // Involving Tokens
-  def place(t: Token, idx: Int = 0)(b: Board) = 
-    b.focus(_.regions).index(idx)
-    .andThen(Focus[Region](_.data.tokens))
-    .modify(_.appended(t))
-
+  // // Involving Tokens
+  // def place(t: Token, idx: Int = 0)(b: Board) = 
+  //   b.focus(_.regions).index(idx)
+  //   .andThen(Focus[Region](_.data.tokens))
+  //   .modify(_.appended(t))
+  def place(t: Token, idx: Int = 0)(b: Board) = ???
 
   // Diagonal, Horizontal and Vertical reflections.
   def reverse(b: Board)  = Board(b.regions.reverse)
@@ -80,7 +75,7 @@ object Transformations {
   // 90 deg clockwise.
   def rotate(b: Board) = ???
 
-  // Make a transformation f symmetrical across a given reflection r.
+  // Make a transformation symmetrical across an axis.
   def sym(r: T1)(f: T1) = f.andThen(r).andThen(f).andThen(r)
   def symD(f: T1) = sym(reflectD)(f)
   def symH(f: T1) = sym(reflectH)(f)
@@ -88,5 +83,5 @@ object Transformations {
   
   // Repeat a transformation that takes one integer parameter.
   def repeat(nTimes: Int, startIndex: Int, step: Int)(f: Int => T1) =
-    (0 until nTimes) map {_ * step} map {_ + startIndex} map f reduce {_ andThen _}
+    (0 until nTimes) map {_ * step + startIndex} map f reduce {_ andThen _}
 }
