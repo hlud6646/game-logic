@@ -1,7 +1,6 @@
 package board
 
 /** At this stage only serving the purpose of letting tokens be owned.
- *  Feels like one that will grow.
  */
 trait Player {
   def otherPlayer: Player

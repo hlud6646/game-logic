@@ -8,7 +8,6 @@ object Transformations {
   type T2 = T1 => T1
   
   /** Color a square.
-   *
    *  @param c the color applied to the square.
    *  @param idx the index of the square to color.
    *  @return a new square with the color updated.
