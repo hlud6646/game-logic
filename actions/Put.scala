@@ -10,7 +10,7 @@ import board.{ Board, Square, Region, Token }
  *  of something upstream might be very bad.
  */
 case class Put(b: Board, t: Token, s: Square) extends Action {
-  def apply = {
+  def enact = {
     // What is the index in b.regions of the square s?
     val i = b.regions indexWhere {_.squares contains s}
     // What is the index of this square in that regions?
@@ -18,5 +18,16 @@ case class Put(b: Board, t: Token, s: Square) extends Action {
     b.focus(_.regions).index(i)
     .andThen(Focus[Region](_.squares).index(j))
     .andThen(Focus[Square](_.tokens)).modify(_.appended(t))
+  }
+}
+
+// Did someone say refactor?
+case class Remove(b: Board, t: Token, s: Square) extends Action {
+  def enact = {
+    val i = b.regions indexWhere {_.squares contains s}
+    val j = b.regions(i).squares indexOf s
+    b.focus(_.regions).index(i)
+    .andThen(Focus[Region](_.squares).index(j))
+    .andThen(Focus[Square](_.tokens)).modify(_ diff List(t))
   }
 }
