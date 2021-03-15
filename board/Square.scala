@@ -5,5 +5,5 @@ package board
 case class Square(
   x: Int, 
   y: Int,
-  tokens: Seq[Token] = Nil,
-  edges:  Seq[Edge]  = Nil)
+  tokens: List[Token] = Nil,
+  edges:  List[Edge]  = Nil)
