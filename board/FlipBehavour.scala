@@ -18,12 +18,15 @@ trait FlipBehavior {
 object FlipBehavior {
 
   implicit val instance = new FlipBehavior {
-    def apply(t: Token) = flipBehaviours(util.Random.nextInt(flipBehaviours.size))(t)
+    // Have to extract the random flipper as a val, so that shuffle doesn't
+    // get called every time we call apply.
+    private val flipper = util.Random.shuffle(flipBehaviours).head
+    def apply(t: Token) = flipper(t)
   }
 
   /** Define various behavious for flipping tokens.
    */
-   private val flipBehaviours: Seq[PartialFunction[Token, Token]] = Seq(
+   private val flipBehaviours: Seq[Function[Token, Token]] = Seq(
       // Identity.
       {
         case Token(x, y, z) => Token(x, y, z)
