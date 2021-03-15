@@ -1,4 +1,5 @@
 package board 
+
 import monocle.Focus
 import monocle.macros.syntax.all._
 
