@@ -9,7 +9,7 @@ package board
  *  with a yellow one, you might expect a green one.
  *
  *  Could have used a semigroup from cats or somewhere, but the 
- *  combine operations here are not required to be accosicative
+ *  combine operations here are not required to be associative
  *  and we don't need all the cats extras for now.
  */
 trait Magma[T] {
