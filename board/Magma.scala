@@ -3,7 +3,7 @@ package board
 /** Magma typeclass. 
  *
  *  Regions are often joined together during board generation.
- *  Whatever properties each of the consituent regions has must
+ *  Whatever properties each of the consituent regions have must
  *  be able to be combined to define the value of the new larger
  *  region in some way. For example, if you join a blue region
  *  with a yellow one, you might expect a green one.
