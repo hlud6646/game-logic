@@ -23,7 +23,7 @@ applies them to a new board, allowing an expressive syntax like
 
 - Move a token to another square anywhere on the board;
 - Move a token up to three places in a diagonal motion;
-- Flip a token;
+- Flip a token
 - Move a token from a region to an adjacent region.
 - Draw a line from one region to another.
 - Draw a dot on a line.

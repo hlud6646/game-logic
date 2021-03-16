@@ -10,6 +10,7 @@ case class Token(
   owner:          Option[Player],
   orientation:    Int)(
   implicit fb:    FlipBehavior) {
-    def flip = fb.apply(this)
+    def flip   = fb.apply(this)
+    def rotate = Token(animal, owner, (orientation + 1) % 4) 
   }
 
