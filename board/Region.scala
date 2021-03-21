@@ -10,13 +10,15 @@ final case class Region(
   // Attributes derived from the squares:
   def tokens: List[Token] = squares flatMap {_.tokens}
   def lines:  List[Edge]  = squares flatMap {_.edges}
-  // Spatial relations
-  def <x  (that: Region) = rcops.compareX(this, that)  < 0
-  def <=x (that: Region) = rcops.compareX(this, that) <= 0
-  def =x  (that: Region) = rcops.compareX(this, that) == 0
-  def <y  (that: Region) = rcops.compareY(this, that)  < 0
-  def <=y (that: Region) = rcops.compareY(this, that) <= 0
-  def =y  (that: Region) = rcops.compareY(this, that) == 0
+
+  // // Spatial relations
+  // def <x(that: Region) = rcops.compareX(this, that)  < 0
+  // def <=x(that: Region) = rcops.compareX(this, that) <= 0
+  // def =x(that: Region) = rcops.compareX(this, that) == 0
+  // def <y(that: Region) = rcops.compareY(this, that)  < 0
+  // def <=y(that: Region) = rcops.compareY(this, that) <= 0
+  // def =y(that: Region) = rcops.compareY(this, that) == 0
+
 }
 object Region{
   def singleton(s: Square): Region = Region(s :: Nil)

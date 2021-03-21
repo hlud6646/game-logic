@@ -1,4 +1,4 @@
-
+package board
 
 /** Typeclass determining how regions are compared spatially.
  *  For example, we might say that A <x B for regions A and B
@@ -13,7 +13,7 @@ trait RegionCompareOps{
 
 object RegionCompareOps {
   import IntSeqComparisons._
-  private val ran = util.Random()
+  private val ran = new util.Random()
   private val f1 = ran.shuffle(comparisons).head
   private val f2 = ran.shuffle(comparisons).head
   implicit val instance = new RegionCompareOps {
@@ -25,17 +25,17 @@ object RegionCompareOps {
 }
 
 object IntSeqComparisons {
-  val comparisons = Seq[Function3[Seq[Int], Seq[Int], Int]](
+  val comparisons = Seq[Function2[Seq[Int], Seq[Int], Int]](
       
     // Strict
-    (xs, ys) => xs forAll (x => ys.forAll (y => x < y)),
+    // (xs, ys) => xs forAll (x => ys.forAll (y => x < y)),
 
     // Relaxed
-    (xs, ys) => xs exists (x => ys.exits(y => x < y)),
+    // (xs, ys) => xs exists (x => ys.exits(y => x < y)),
 
     // Strange
-    (xs, ys) => xs exists (x => ys.forAll(y => x < y)),
-    (xs, ys) => xs forAll (x => ys.exits(y => x < y)),
+    // (xs, ys) => xs exists (x => ys.forAll(y => x < y)),
+    // (xs, ys) => xs forAll (x => ys.exits(y => x < y)),
   )
 
 
