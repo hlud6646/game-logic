@@ -27,8 +27,8 @@ object RegionCompareOps {
 object IntSeqComparisons {
   val comparisons = Seq[Function2[Seq[Int], Seq[Int], Int]](
       
-    // Strict
-    // (xs, ys) => xs forAll (x => ys.forAll (y => x < y)),
+    //Strict
+    (xs, ys) => if(xs forall (x => ys.forall (y => x < y))) 1 else -1
 
     // Relaxed
     // (xs, ys) => xs exists (x => ys.exits(y => x < y)),
