@@ -58,7 +58,9 @@ class TokenWithSwapSpecs extends Properties("Token with swap flip") {
 }
 
 
-
+class SquareSuite extends AnyFunSuite with Checkers {
+  test("New square has no tokens.")(Square(1, 2).tokens.isEmpty)
+}
 
 
 // object SquareSuite extends ??? {
