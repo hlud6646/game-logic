@@ -10,16 +10,8 @@ package board
  *  TODO: Migrate to the adt defined below.
  */
 
-sealed trait Animal
-object Animal {
-  case object A extends Animal
-  case object R extends Animal
-  case object M extends Animal
-  case object E extends Animal
-}
-
 case class Token(
-  animal:         Option[String],
+  animal:         Option[Animal],
   owner:          Option[Player],
   orientation:    Int)(
   implicit fb:    FlipBehavior) {

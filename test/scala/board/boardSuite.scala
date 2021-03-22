@@ -7,38 +7,33 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
 
+import Player.{ P1, P2 }
+import Animal.{ A, R, M, E }
+import Color.{ Red, White }
+import LifeStatus.{ Alive, Dead }
+
 object Generators {
-
-  import Player.{ P1, P2 }
   def genOwner = Gen.oneOf(P1, P2)
-
   def genToken = for {
-    animal      <- Gen.option(Gen.oneOf("A" :: "R" :: "M" :: "E" :: Nil)) 
+    animal      <- Gen.option(Gen.oneOf(A :: R :: M :: E :: Nil)) 
     owner       <- Gen.option(genOwner)
     orientation <- Gen.choose(0, 3)
   } yield Token(animal, owner, orientation)
-
   def genEdge = for {
     to      <- genSquare
     dotted  <- Gen.option(genOwner)
     owner   <- genOwner
   } yield Edge(to, dotted, owner)
-
   def genSquare = for {
     x <- Gen.choose(0, 7)
     y <- Gen.choose(0, 7)
     tokens <- Gen.listOf(genToken)
   } yield Square(x, y, tokens, Nil)
-
-  import Color.{ Red, White }
-  import LifeStatus.{ Alive, Dead }
   def genRegion = for {
     squares <- Gen.listOf(genSquare)
     color   <- Gen.oneOf(Red, White)
     lstat   <- Gen.oneOf(Alive, Dead)
   } yield Region(squares, color, lstat)
-
-
 }
 
 class TokenSpecs extends Properties("Token with identity flip") {

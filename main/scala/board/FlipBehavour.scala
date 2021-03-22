@@ -3,6 +3,8 @@ package board
 import monocle.Focus
 import monocle.macros.syntax.all._
 
+import Animal.{ A, R, M, E }
+
 /** What is this!?
  *
  * Tokens can be flipped. When they are, something might happen.
@@ -22,7 +24,8 @@ object FlipBehavior {
   import Flippers._ 
   val all: Seq[Function[Token, Token]] = Seq(
     identity, swapPairs, cycle, transfer)
-  implicit val instance = new FlipBehavior {
+  def instance(tokenEndo: Token => Token) = new FlipBehavior { def apply(t: Token) = tokenEndo(t) }
+  implicit def randomInstance = new FlipBehavior {
     // Have to extract the random flipper as a val, so that shuffle doesn't
     // get called every time we call apply.
     val flipper = util.Random.shuffle(all).head
@@ -36,31 +39,27 @@ object FlipBehavior {
    *  which rely on an implicit FlipBehaviour which relies on ...
    */
   object Flippers {
-    // Identity.
-    val identity: Function[Token, Token] = {
-      case Token(x, y, z) => Token(x, y, z)
-    }
 
     def swapPairs(t: Token) = t.focus(_.animal).modify( _ match {
-      case Some("M") => Some("E")
-      case Some("E") => Some("M")
-      case Some("A") => Some("R")
-      case Some("R") => Some("A")
+      case Some(M) => Some(E)
+      case Some(E) => Some(M)
+      case Some(A) => Some(R)
+      case Some(R) => Some(A)
       case None => None
     })
 
     // Cycle through the four in order of size.
     def cycle(t: Token) = t.focus(_.animal).modify(_ match {
-      case Some("A") => Some("R")
-      case Some("R") => Some("M")
-      case Some("M") => Some("E")
-      case Some("E") => Some("A")
+      case Some(A) => Some(R)
+      case Some(R) => Some(M)
+      case Some(M) => Some(E)
+      case Some(E) => Some(A)
       case None => None
     })
 
     // Transfer ownership of traiterous Monkeys.
-    val transfer: Function[Token, Token] = {
-      case Token(Some("M"), Some(player), y) => Token(Some("M"), Some(player.otherPlayer), y)
+    def transfer(t: Token) = t match {
+      case Token(Some(M), Some(player), y) => Token(Some(M), Some(player.otherPlayer), y)
       case Token(x, y, z) => Token(x, y, z)
     }
   
