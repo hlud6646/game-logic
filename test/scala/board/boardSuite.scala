@@ -39,13 +39,18 @@ object Generators {
 class TokenSpecs extends Properties("Token with identity flip") {
   import Generators._
 
+  // Override the flip behaviour.
+  implicit val fb: FlipBehavior = new FlipBehavior {
+    def apply(t: Token) = t
+  }
+
   implicit val arbToken = Arbitrary(genToken)
 
   property("Rotating a token four times does nothing.") = forAll { (t: Token) =>
     t.rotate.rotate.rotate.rotate == t
   }
 
-  // property("Flipping does nothing.") = forAll { t: Token => t.flip == t }
+  property("Flipping does nothing.") = forAll { t: Token => t.flip == t }
   
 }
 

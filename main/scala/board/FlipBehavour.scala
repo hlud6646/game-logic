@@ -25,7 +25,7 @@ object FlipBehavior {
   val all: Seq[Function[Token, Token]] = Seq(
     identity, swapPairs, cycle, transfer)
   def instance(tokenEndo: Token => Token) = new FlipBehavior { def apply(t: Token) = tokenEndo(t) }
-  implicit def randomInstance = new FlipBehavior {
+  implicit val randomInstance = new FlipBehavior {
     // Have to extract the random flipper as a val, so that shuffle doesn't
     // get called every time we call apply.
     val flipper = util.Random.shuffle(all).head
