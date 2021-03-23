@@ -1,7 +1,7 @@
 package board
 
 import org.scalacheck.{ Gen, Properties, Arbitrary }
-import org.scalacheck.Prop.forAll
+import org.scalacheck.Prop.{ forAll, propBoolean }
 
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
@@ -14,21 +14,25 @@ import LifeStatus.{ Alive, Dead }
 
 object Generators {
   def genOwner = Gen.oneOf(P1, P2)
+
   def genToken = for {
     animal      <- Gen.option(Gen.oneOf(A :: R :: M :: E :: Nil)) 
     owner       <- Gen.option(genOwner)
     orientation <- Gen.choose(0, 3)
   } yield Token(animal, owner, orientation)
+
   def genEdge = for {
     to      <- genSquare
     dotted  <- Gen.option(genOwner)
     owner   <- genOwner
   } yield Edge(to, dotted, owner)
+
   def genSquare = for {
     x <- Gen.choose(0, 7)
     y <- Gen.choose(0, 7)
     tokens <- Gen.listOf(genToken)
   } yield Square(x, y, tokens, Nil)
+
   def genRegion = for {
     squares <- Gen.listOf(genSquare)
     color   <- Gen.oneOf(Red, White)
@@ -36,24 +40,45 @@ object Generators {
   } yield Region(squares, color, lstat)
 }
 
-class TokenSpecs extends Properties("Token with identity flip") {
+class TokenSpecs extends Properties("Token") {
   import Generators._
-
-  // Override the flip behaviour.
-  implicit val fb: FlipBehavior = new FlipBehavior {
-    def apply(t: Token) = t
-  }
-
   implicit val arbToken = Arbitrary(genToken)
 
   property("Rotating a token four times does nothing.") = forAll { (t: Token) =>
     t.rotate.rotate.rotate.rotate == t
   }
-
-  property("Flipping does nothing.") = forAll { t: Token => t.flip == t }
-  
+  property("Rotating a token does something") = forAll { t: Token => t.rotate.orientation != t.orientation }
 }
 
+class TokenWithIdFlip extends Properties("Token") {
+  import Generators._
+  implicit val arbToken = Arbitrary(genToken)
+
+  implicit val fb: Token => Token = identity
+  property("Flipping with identity does nothing.") = forAll { t: Token => t.flip == t }
+}
+
+class TokenWithSwapFlip extends Properties("Token") {
+  import Generators._
+  implicit val arbToken = Arbitrary(genToken)
+
+  implicit val fb: Token => Token = FlipBehaviour.swapPairs
+  property("Flipping with swapPairs twice does nothing.") = forAll { t: Token => t.flip.flip == t }
+}
+
+class TokenWithTransferFlip extends Properties("Token") {
+  import Generators._
+  implicit val arbToken = Arbitrary(genToken)
+
+  implicit val fb: Token => Token = FlipBehaviour.transfer
+  property("Flipping with transfer twice does nothing.") = forAll { t: Token => t.flip.flip == t }
+  property("Flipping owned monkey with transfer gives token new owner.") = forAll { t: Token => 
+    (t.animal == Some(M) && t.owner.isDefined) ==> (t.flip.owner != t.owner)
+  }
+  property("Flipping non monkey changes nothing.") = forAll { t: Token => 
+    (t.animal != Some(M)) ==> (t.flip == t)
+  }
+}
 
 class SquareSuite extends AnyFunSuite with Checkers {
   import Generators._
@@ -91,11 +116,11 @@ class RegionSpecs extends Properties("Region") {
     }
 
   property("If you combine two regions, you get all their tokens") = forAll {
-    (a: Region, b: Region) => Magma[Region].combine(a, b).tokens.toSet == a.tokens.toSet ++ b.tokens.toSet
+    (a: Region, b: Region) => Magma[Region].combine(a, b).tokens.size == a.tokens.size + b.tokens.size
   }
 
   property("If you combine two regions, you get all their edges") = forAll {
-    (a: Region, b: Region) => Magma[Region].combine(a, b).edges.toSet == a.edges.toSet ++ b.edges.toSet
+    (a: Region, b: Region) => Magma[Region].combine(a, b).edges.size == a.edges.size + b.edges.size
   }
 }
 

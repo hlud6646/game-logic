@@ -44,16 +44,18 @@ object Action {
   /** Flip a token. */
   case class Flip(t: Token, s: Square) extends Action {
     def enact(b: Board) = {
-      val i = s.tokens indexOf t
-      focusOnTokens(b, s).index(i).modify(_.flip)
+      ???
+      // val i = s.tokens indexOf t
+      // focusOnTokens(b, s).index(i).modify(_.flip)
     }
   }
   
   /** Rotate a token. */
   case class Rotate(t: Token, s: Square) extends Action {
     def enact(b: Board) = {
-      val i = s.tokens indexOf t
-      focusOnTokens(b, s).index(i).modify(_.rotate)
+      ???
+      // val i = s.tokens indexOf t
+      // focusOnTokens(b, s).index(i).modify(_.rotate)
     }
   }
   
