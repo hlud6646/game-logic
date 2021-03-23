@@ -8,10 +8,10 @@ object Transformations {
   type T1 = Board => Board
   type T2 = T1 => T1
   
-  /** Color a square.
+  /** Color a region.
    *  @param c the color applied to the square.
-   *  @param idx the index of the square to color.
-   *  @return a new square with the color updated.
+   *  @param idx the index of the region to color.
+   *  @return a new board with the region updated.
    */
   def color(c: Color, idx: Int)(b: Board) = 
     b.focus(_.regions).index(idx).andThen(Focus[Region](_.color)).replace(c)
