@@ -1,6 +1,6 @@
 package board 
 
-import monocle.Focus
+import monocle.{ Focus, GenLens, Traversal }
 import monocle.macros.syntax.all._
 
 object Transformations {
@@ -52,34 +52,36 @@ object Transformations {
 
 
   
-  // def join(b: Board) = {
-  //   val (x, rest) = b.regions splitAt 2
-  //   Board( x.reduce(Magma[Region].combine) :: rest  )
-  // }
-  // def joinRow(rowIndex: Int = 0)(b: Board) = {
-  //   val (before, rest1) = b.regions.splitAt(8 * rowIndex)
-  //   val (toJoin, rest2) = rest1.splitAt(8)
-  //   before ::: toJoin.reduce(Magma[Region].combine) :: rest2
-  // }
+  // Diagonal, Horizontal and Vertical reflections.
+  def reflectD(b: Board) = ???
+  
+
+  // for each square, x becomes (7 - x) mod 8
+  val regionsLens = GenLens[Board](_.regions)
+  val squaresLens = GenLens[Region](_.squares)
+  val regionTraversal = Traversal.fromTraverse[List, Region]
+  val squareTraversal = Traversal.fromTraverse[List, Square]
+  val xLens = GenLens[Square](_.x)
+
+  
+  def reflectH(b: Board) = {
+    val wow = ((regionsLens composeTraversal regionTraversal) andThen squaresLens) composeTraversal squareTraversal
+    (wow andThen xLens) modify { (7 - x) % 8 }
+  }
+  
 
 
 
-
-
-  // // Diagonal, Horizontal and Vertical reflections.
-  // def reverse(b: Board)  = Board(b.regions.reverse)
-  // def reflectD(b: Board) = reverse(b)
-  // def reflectH(b: Board) = ???
-  // def reflectV(b: Board) = ???
+  def reflectV(b: Board) = ???
 
   // // 90 deg clockwise.
-  // def rotate(b: Board) = ???
+  def rotate(b: Board) = ???
 
-  // // Make a transformation symmetrical across an axis.
-  // def sym(r: T1)(f: T1) = f.andThen(r).andThen(f).andThen(r)
-  // def symD(f: T1) = sym(reflectD)(f)
-  // def symH(f: T1) = sym(reflectH)(f)
-  // def symV(f: T1) = sym(reflectV)(f)
+  // Make a transformation symmetrical across an axis.
+  def sym(r: T1)(f: T1) = f.andThen(r).andThen(f).andThen(r)
+  def symD(f: T1) = sym(reflectD)(f)
+  def symH(f: T1) = sym(reflectH)(f)
+  def symV(f: T1) = sym(reflectV)(f)
   
   // Repeat a transformation that takes one integer parameter.
   def repeat(nTimes: Int, startIndex: Int, step: Int)(f: Int => T1) =
