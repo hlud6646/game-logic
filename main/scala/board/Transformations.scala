@@ -4,27 +4,15 @@ import monocle.{ Focus, Traversal }
 import monocle.macros.GenLens
 import monocle.macros.syntax.all._
 
+/** Modifications to the state of the board are contained here.
+ *  Note that none of the classes for smaller parts (region or square)
+ *  contain modification methods.  They do provide optics which allow
+ *  a function Board => Board to modify one/many of these nested parts.
+ */
 object Transformations {
   
   type T1 = Board => Board
   type T2 = T1 => T1
-  
-  // /** Color a region.
-  //  *  @param c the color applied to the region.
-  //  *  @param idx the index of the region to color.
-  //  *  @return a new board with the region updated.
-  //  */
-  // def color(c: Color, idx: Int)(b: Board) = 
-  //   b.focus(_.regions).index(idx).andThen(Focus[Region](_.color)).replace(c)
-  // def stripes(c: Color)(b: Board) = 
-  //   repeat(nTimes=32, startIndex=0, step=2)(color(c, _))(b)
-  // def checker(c: Color)(b: Board) = colorByModulus(2, c)(b)
-  // def colorByModulus(m: Int, c: Color)(b: Board) = Board(
-  //   (b.regions zip (0 to b.regions.size))
-  //   .map {case (r, i) => 
-  //     if ((i + i/8)%m == 0) r
-  //     else r.focus(_.color).replace(c)
-  // })
   
   def color(r: Region, c: Color)(b: Board): Board = 
     b.focus(_.regions)
@@ -35,6 +23,10 @@ object Transformations {
     color(b regionOf s, c)(b)
   def color(coordinates: (Int, Int), c: Color)(b: Board): Board = 
     color(b regionAt coordinates, c)(b)
+
+  def stripes = ???
+  def checker = ???
+  def colorByPredicate(p: (Int, Int) => Boolean)(b: Board): Board = ???
   
   // Join two regions.
   def join(x: Region, y: Region)(b: Board): Board =   
@@ -50,8 +42,6 @@ object Transformations {
     val joins = (1 to 7) map { x => join((0, y), (x, y))(_) }
     (joins reduce (_ andThen _))(b)
   }
-
-
   
   // Diagonal, Horizontal and Vertical reflections.
   private def reflectOrthogonal(l: monocle.Lens[Square, Int])(b: Board) = {
