@@ -13,6 +13,11 @@ object Transformations {
   
   type T1 = Board => Board
   type T2 = T1 => T1
+
+  // An optic for traversing all the squares on a board.
+  private val eachSquare = Board.eachRegion andThen Region.eachSquare
+  private val eachColor  = Board.eachRegion andThen Region.color
+  private def parity(s: Square) = (s.x + s.y) % 2
   
   def color(r: Region, c: Color)(b: Board): Board = 
     b.focus(_.regions)
@@ -24,9 +29,12 @@ object Transformations {
   def color(coordinates: (Int, Int), c: Color)(b: Board): Board = 
     color(b regionAt coordinates, c)(b)
 
-  def stripes = ???
-  def checker = ???
-  def colorByPredicate(p: (Int, Int) => Boolean)(b: Board): Board = ???
+
+  // Checkerboard pattern.  No idea what will happen if the board contains previous joins.
+  private def colorByPredicate(p: Region => Boolean, c: Color)(b: Board): Board =
+    eachRegion.modify(r =>  if p(r) r else  r.focus(_.color).replace(c))(b)
+  def checker(b: Board) = colorByPredicate( parity(r.squares.head), Red )(b)
+  def stripes(b: Board) = colorByPredicate( r.squares.head.y % 2 == 0, Red )(b)
   
   // Join two regions.
   def join(x: Region, y: Region)(b: Board): Board =   
@@ -45,7 +53,7 @@ object Transformations {
   
   // Diagonal, Horizontal and Vertical reflections.
   private def reflectOrthogonal(l: monocle.Lens[Square, Int])(b: Board) = {
-    val traversal = Board.eachRegion andThen Region.eachSquare andThen l
+    val traversal = eachSquare andThen l
     def f(z: Int) = (7 - z) % 8
     traversal.modify(f)(b)
   }
