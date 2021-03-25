@@ -156,7 +156,7 @@ class BoardSuite extends AnyFunSuite {
 
 class BoardSpecs extends Properties("Board") {
   import Generators._
-  import Transformations.{ join, joinRow }
+  import Transformations._
 
   val genIndex = Gen.choose(0, 7)
   type Index = Int
@@ -177,5 +177,9 @@ class BoardSpecs extends Properties("Board") {
     forAll { (b: Board, y: Index) =>
       joinRow(y)(b).regions.size >= b.regions.size - 7
     }
+
+  property("Horizontal reflection is an involution") = forAll { b: Board => reflectH(reflectH(b)) == b}
+  property("Vertical reflection is an involution") = forAll { b: Board => reflectV(reflectV(b)) == b}
+  property("Diagonal reflection is an involution") = forAll { b: Board => reflectD(reflectD(b)) == b}
   
 }

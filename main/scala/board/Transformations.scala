@@ -1,6 +1,7 @@
 package board 
 
-import monocle.{ Focus, GenLens, Traversal }
+import monocle.{ Focus, Traversal }
+import monocle.macros.GenLens
 import monocle.macros.syntax.all._
 
 object Transformations {
@@ -53,28 +54,16 @@ object Transformations {
 
   
   // Diagonal, Horizontal and Vertical reflections.
-  def reflectD(b: Board) = ???
-  
-
-  // for each square, x becomes (7 - x) mod 8
-  val regionsLens = GenLens[Board](_.regions)
-  val squaresLens = GenLens[Region](_.squares)
-  val regionTraversal = Traversal.fromTraverse[List, Region]
-  val squareTraversal = Traversal.fromTraverse[List, Square]
-  val xLens = GenLens[Square](_.x)
-
-  
-  def reflectH(b: Board) = {
-    val wow = ((regionsLens composeTraversal regionTraversal) andThen squaresLens) composeTraversal squareTraversal
-    (wow andThen xLens) modify { (7 - x) % 8 }
+  private def reflectOrthogonal(l: monocle.Lens[Square, Int])(b: Board) = {
+    val traversal = Board.eachRegion andThen Region.eachSquare andThen l
+    def f(z: Int) = (7 - z) % 8
+    traversal.modify(f)(b)
   }
+  def reflectH(b: Board): Board = reflectOrthogonal(Square.x)(b)
+  def reflectV(b: Board): Board = reflectOrthogonal(Square.y)(b)
+  def reflectD(b: Board): Board = reflectV(reflectH(b))
   
-
-
-
-  def reflectV(b: Board) = ???
-
-  // // 90 deg clockwise.
+  // 90 deg clockwise.
   def rotate(b: Board) = ???
 
   // Make a transformation symmetrical across an axis.

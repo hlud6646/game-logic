@@ -1,8 +1,10 @@
 package board
 
+import monocle.macros.Lenses
+
 /** As in a square on a chess board.
  */
-case class Square(
+@Lenses case class Square(
   x: Int, 
   y: Int,
   tokens: List[Token] = Nil,

@@ -1,17 +1,18 @@
 package board
 
-final case class Region(
+import monocle.Traversal
+import monocle.macros.Lenses
+
+@Lenses final case class Region(
   squares:    List[Square],
   color:      Color         = Color.White,
   lifeStatus: LifeStatus    = LifeStatus.Alive
-)(
-  implicit rcops: RegionCompareOps
-  ) {
+) {
   def +(that: Region): Region = Magma[Region].combine(this, that)
   def tokens: List[Token] = squares flatMap {_.tokens}
   def edges:   List[Edge] = squares flatMap {_.edges}
 
-  // // Spatial relations
+  // // Spatial relations.
   // def <x(that: Region) = rcops.compareX(this, that)  < 0
   // def <=x(that: Region) = rcops.compareX(this, that) <= 0
   // def =x(that: Region) = rcops.compareX(this, that) == 0
@@ -23,8 +24,8 @@ final case class Region(
 object Region{
   def singleton(s: Square): Region = Region(s :: Nil)
   /** With only three attributes, the handwritten regionMagma boilerplate is 
-   *  not overly offensive. If it grows much more though, use a auto 
-   *  derived one with shapeless etc.
+   *  not overly offensive. If it grows much more though mabye use a auto 
+   *  derived one?
    */
   implicit val regionMagma: Magma[Region] = 
     Magma.instance{ (r1, r2)  => Region(
@@ -35,4 +36,6 @@ object Region{
   implicit def listMagma[T]: Magma[List[T]] = 
     Magma.instance{ (x1: List[T], x2: List[T]) => x1 ++ x2 }
 
+  // Optics:
+  val eachSquare = squares andThen Traversal.fromTraverse[List, Square]
 }
