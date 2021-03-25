@@ -7,7 +7,7 @@ final case class Region(
 )(
   implicit rcops: RegionCompareOps
   ) {
-  // Attributes derived from the squares:
+  def +(that: Region): Region = Magma[Region].combine(this, that)
   def tokens: List[Token] = squares flatMap {_.tokens}
   def edges:   List[Edge] = squares flatMap {_.edges}
 
@@ -26,7 +26,6 @@ object Region{
    *  not overly offensive. If it grows much more though, use a auto 
    *  derived one with shapeless etc.
    */
-
   implicit val regionMagma: Magma[Region] = 
     Magma.instance{ (r1, r2)  => Region(
       Magma[List[Square]].combine(r1.squares, r2.squares),

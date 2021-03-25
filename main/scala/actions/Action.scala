@@ -19,26 +19,27 @@ abstract class Action {
 object Action {
   
   private def focusOnSquare(b: Board, s: Square) = {
-      val i = b.regions indexWhere {_.squares contains s}
-      val j = b.regions(i).squares indexOf s
-      b.focus(_.regions).index(i)
-      .andThen(Focus[Region](_.squares).index(j))
+    ???
+      // val i = b.regions indexWhere {_.squares contains s}
+      // val j = b.regions(i).squares indexOf s
+      // b.focus(_.regions).index(i)
+      // .andThen(Focus[Region](_.squares).index(j))
     }
-  private def focusOnTokens(b: Board, s: Square) =
-    focusOnSquare(b, s).andThen(Focus[Square](_.tokens))
-  private def focusOnEdges(b: Board, s: Square) = 
-    focusOnSquare(b, s).andThen(Focus[Square](_.edges))
+  private def focusOnTokens(b: Board, s: Square) = ???
+    // focusOnSquare(b, s).andThen(Focus[Square](_.tokens))
+  private def focusOnEdges(b: Board, s: Square) = ???
+    // focusOnSquare(b, s).andThen(Focus[Square](_.edges))
 
 
   //  --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---  --- --- --- ---// 
 
   /** Put a token on a square. */
   case class Put(t: Token, s: Square) extends Action {
-    def enact(b: Board) = focusOnTokens(b, s).modify(_.appended(t))
+    def enact(b: Board) = ??? //focusOnTokens(b, s).modify(_.appended(t))
   }
 
   case class Remove(t: Token, s: Square) extends Action {
-    def enact(b: Board) = focusOnTokens(b, s).modify(_ diff List(t))
+    def enact(b: Board) = ??? //focusOnTokens(b, s).modify(_ diff List(t))
   }
 
   /** Flip a token. */
@@ -62,14 +63,15 @@ object Action {
   /** Connect two squares with an edge */
   case class DrawEdge(orig: Square, dest: Square, player: Player) extends Action {
     val newEdge = Edge(dest, dotted=None, owner=player)
-    def enact(b: Board) = focusOnEdges(b, orig).modify(_.appended(newEdge))
+    def enact(b: Board) = ??? //focusOnEdges(b, orig).modify(_.appended(newEdge))
   }
 
   /** Dot an edge. */
   case class DotAnEdge(orig: Square, edge: Edge, player: Player) extends Action {
     def enact(b: Board) = {
-      val i = orig.edges indexOf edge
-      focusOnEdges(b, orig).index(i).andThen(Focus[Edge](_.dotted)).replace(Some(player))
+      val i = ??? //orig.edges indexOf edge
+      // focusOnEdges(b, orig).index(i).andThen(Focus[Edge](_.dotted)).replace(Some(player))
+      ???
     }
   }
 

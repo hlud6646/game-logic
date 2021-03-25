@@ -38,6 +38,9 @@ object Generators {
     color   <- Gen.oneOf(Red, White)
     lstat   <- Gen.oneOf(Alive, Dead)
   } yield Region(squares, color, lstat)
+
+  def genBoard = Gen.const(Board())
+
 }
 
 class TokenSpecs extends Properties("Token") {
@@ -110,6 +113,8 @@ class RegionSpecs extends Properties("Region") {
   import Generators._
   implicit val arbRegion: Arbitrary[Region] = Arbitrary(genRegion)
 
+  // These checks are all a bit broken cause if you try to combine a region with itself, 
+  // there should be no change.
   property("If you combine two regions A and B the number of squares #(A+B) is #A + #B") =
     forAll { (a: Region, b: Region) =>
       Magma[Region].combine(a, b).squares.size == a.squares.size + b.squares.size
@@ -124,14 +129,53 @@ class RegionSpecs extends Properties("Region") {
   }
 }
 
+object BoardInvariants {
+  implicit val arbBoard: Arbitrary[Board] = Arbitrary(Generators.genBoard)
+
+  // All boards have 64 squares.
+  forAll { b: Board => 
+    (b.regions flatMap {_.squares}).size == 64  
+  }
+
+  // Any two regions either coincide or have disjoint sqaure sets.
+
+
+}
+
 class BoardSuite extends AnyFunSuite {
 
   test("Init board no args.") {
     val b = Board()
     assert(b.regions.size == 64)
+    assert(b.regions.flatMap(_.squares).size == 64)
     assert(b.regions.forall(_.squares.size == 1))
     assert(b.regions.forall(_.color == Color.White))
     assert(b.regions.forall(_.lifeStatus == LifeStatus.Alive))
   }
+}
 
+class BoardSpecs extends Properties("Board") {
+  import Generators._
+  import Transformations.{ join, joinRow }
+
+  val genIndex = Gen.choose(0, 7)
+  type Index = Int
+  implicit val arbIndex: Arbitrary[Index] = Arbitrary(genIndex)
+  implicit val arbBoard: Arbitrary[Board] = Arbitrary(genBoard)
+  
+  property("Joining different regions reduces length of regions list by 1") = 
+    forAll { (b: Board, x1: Index, y1: Index, x2: Index, y2: Index) => 
+      ( b.regionAt((x1, y1)) != b.regionAt((x2, y2)) ) ==> 
+      ( join((x1, y1), (x2, y2))(b).regions.size == b.regions.size - 1 )
+  }
+  
+  property("Joining a row on a new board takes away 7 regions. (8 becomes 1)") = 
+    forAll { y: Index => joinRow(y)(Board()).regions.size == 64 - 7}
+
+  // Note that arbitary board is not arbitrary yet, so this could be false negative.
+  property("Joining a row on an arbitary board takes away up to 7 regions.") = 
+    forAll { (b: Board, y: Index) =>
+      joinRow(y)(b).regions.size >= b.regions.size - 7
+    }
+  
 }
