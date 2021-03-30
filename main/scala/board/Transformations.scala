@@ -6,11 +6,6 @@ import monocle.macros.syntax.all._
 
 import Color._
 
-/** Modifications to the state of the board are contained here.
- *  Note that none of the classes for smaller parts (region or square)
- *  contain modification methods.  They do provide optics which allow
- *  a function Board => Board to modify one/many of these nested parts.
- */
 object Transformations {
   
   type T1 = Board => Board

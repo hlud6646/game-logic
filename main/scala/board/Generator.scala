@@ -5,7 +5,7 @@ import util.Random.{ nextInt, nextBoolean }
 import Transformations._
 
 object Generator extends App {
-
+  
   // 1st attempt at board generation.
   
   def oneOf[T](x: List[T]): T = x(nextInt(x.size))
@@ -30,9 +30,9 @@ object Generator extends App {
   // Give the token placements some symmetry:
   def tps = tokenPlacements map { oneOf(syms)(_) }
 
-  val chain: List[T1] = oneOf(colorMethods) :: joins2 ::: tps
-
-  val b = Board.fromChain(chain)
+  def randomBoard = Board.fromChain(
+    oneOf(colorMethods) :: joins2 ::: tps
+  )
 
 
 }
