@@ -1,5 +1,7 @@
 package board 
 
+import Color._
+
 import monocle.{ Focus, Traversal }
 import monocle.macros.GenLens
 import monocle.macros.syntax.all._
@@ -16,6 +18,7 @@ object Transformations {
   type T1 = Board => Board
   type T2 = T1 => T1
 
+<<<<<<< HEAD
   // Join two regions.
   def join(x: Region, y: Region): T1 =   
     _.focus(_.regions).modify(r => (x + y) :: (r diff x :: y :: Nil))
@@ -25,6 +28,12 @@ object Transformations {
   // Join two regions given coordinates of respective representatives.
   def join(coords1: (Int, Int), coords2: (Int, Int))(b: Board): Board =
     join( b regionAt coords1, b regionAt coords2)(b)
+=======
+  // An optic for traversing all the squares on a board.
+  private val eachSquare = Board.eachRegion andThen Region.eachSquare
+  private val eachColor  = Board.eachRegion andThen Region.color
+  private def parity(s: Square): Int = (s.x + s.y) % 2
+>>>>>>> dev
   
   def color(r: Region, c: Color)(b: Board): Board = 
     b.focus(_.regions)
@@ -44,7 +53,27 @@ object Transformations {
   }
   def stripes: T1 = colorByPredicate( r => r.squares.head.y % 2   == 0, Red )
 
+<<<<<<< HEAD
   def joinRow(y: Int): T1 = {
+=======
+  // Checkerboard pattern.  No idea what will happen if the board contains previous joins.
+  private def colorByPredicate(p: Region => Boolean, c: Color)(b: Board): Board =
+    Board.eachRegion.modify(r =>  if (p(r)) r else  r.focus(_.color).replace(c))(b)
+  def checker(b: Board) = colorByPredicate( r => parity(r.squares.head) == 0, Red )(b)
+  def stripes(b: Board) = colorByPredicate( r => r.squares.head.y % 2   == 0, Red )(b)
+  
+  // Join two regions.
+  def join(x: Region, y: Region)(b: Board): Board =   
+    b.focus(_.regions).modify(r => (x + y) :: (r diff x :: y :: Nil))
+  // Join two regions specified by a representative.
+  def join(x: Square, y: Square)(b: Board): Board = 
+    join(b.regionOf(x), b.regionOf(y))(b)
+  def join(coords1: (Int, Int), coords2: (Int, Int))(b: Board): Board =
+    join( b regionAt coords1, b regionAt coords2)(b)
+
+
+  def joinRow(y: Int)(b: Board) = {
+>>>>>>> dev
     val joins = (1 to 7) map { x => join((0, y), (x, y))(_) }
     (joins reduce (_ andThen _))
   }

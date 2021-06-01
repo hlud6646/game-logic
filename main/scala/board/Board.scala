@@ -1,9 +1,14 @@
 package board
 
 import monocle.Traversal
+import monocle.Lens
 import monocle.macros.Lenses
 
-@Lenses case class Board(regions: List[Region]) {
+@Lenses case class Board(
+  regions: List[Region], 
+  tokens: Map[Token, Square],
+  edges: List[Edge]
+) {
   // Locate a region by a square that it contains.
   def regionOf(s: Square): Region = (regions find {_.squares contains s}).get
   // Locate a region by the coordinates of a square it contains.
@@ -17,7 +22,7 @@ object Board {
   // Alternate constructor providing a blank board.
   def apply() = {
     val s = for { x <- 0 until 8; y <- 0 until 8} yield Square(x, y)
-    new Board( (s map {Region.singleton(_)}).toList )
+    new Board( (s map {Region.singleton(_)}).toList, Map(), List() )
   }
 
   // Alternate constructor from a list of board transformations (enodomorphisms).

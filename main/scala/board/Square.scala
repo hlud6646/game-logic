@@ -6,9 +6,8 @@ import monocle.macros.Lenses
  */
 @Lenses case class Square(
   x: Int, 
-  y: Int,
-  tokens: List[Token] = Nil,
-  edges:  List[Edge]  = Nil){
+  y: Int
+)
 
     ////Positional comparisons.
     //def <x  (that: Square) = this.x <x that.x
@@ -22,4 +21,4 @@ import monocle.macros.Lenses
     //def >y  (that: Square) = !<=y (that)
     //def >=y (that: Square) = !<y (that)
 
-  }
+
