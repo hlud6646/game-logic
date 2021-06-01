@@ -1,5 +1,7 @@
 package board 
 
+import Color._
+
 import monocle.{ Focus, Traversal }
 import monocle.macros.GenLens
 import monocle.macros.syntax.all._
@@ -17,7 +19,7 @@ object Transformations {
   // An optic for traversing all the squares on a board.
   private val eachSquare = Board.eachRegion andThen Region.eachSquare
   private val eachColor  = Board.eachRegion andThen Region.color
-  private def parity(s: Square) = (s.x + s.y) % 2
+  private def parity(s: Square): Int = (s.x + s.y) % 2
   
   def color(r: Region, c: Color)(b: Board): Board = 
     b.focus(_.regions)
@@ -32,9 +34,9 @@ object Transformations {
 
   // Checkerboard pattern.  No idea what will happen if the board contains previous joins.
   private def colorByPredicate(p: Region => Boolean, c: Color)(b: Board): Board =
-    eachRegion.modify(r =>  if (p(r)) r else  r.focus(_.color).replace(c))(b)
-  def checker(b: Board) = colorByPredicate( parity(r.squares.head), Red )(b)
-  def stripes(b: Board) = colorByPredicate( r.squares.head.y % 2 == 0, Red )(b)
+    Board.eachRegion.modify(r =>  if (p(r)) r else  r.focus(_.color).replace(c))(b)
+  def checker(b: Board) = colorByPredicate( r => parity(r.squares.head) == 0, Red )(b)
+  def stripes(b: Board) = colorByPredicate( r => r.squares.head.y % 2   == 0, Red )(b)
   
   // Join two regions.
   def join(x: Region, y: Region)(b: Board): Board =   

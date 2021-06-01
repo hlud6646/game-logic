@@ -1,6 +1,7 @@
 package board
 
 import monocle.Traversal
+import monocle.Lens
 import monocle.macros.Lenses
 
 @Lenses case class Board(
@@ -21,7 +22,7 @@ object Board {
   // Alternate constructor providing a blank board.
   def apply() = {
     val s = for { x <- 0 until 8; y <- 0 until 8} yield Square(x, y)
-    new Board( (s map {Region.singleton(_)}).toList )
+    new Board( (s map {Region.singleton(_)}).toList, Map(), List() )
   }
 
   // Alternate constructor from a list of board transformations (enodomorphisms).
