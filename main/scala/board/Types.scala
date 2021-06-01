@@ -6,6 +6,6 @@ import eu.timepit.refined.numeric.Interval
 
 object Types {
 
-  type SquareLocation = Int Refined Interval.Closed[0, 7]
+  // type SquareLocation = Int Refined Interval.Closed[0, 7]
   
 }

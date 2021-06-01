@@ -3,7 +3,11 @@ package board
 import monocle.Traversal
 import monocle.macros.Lenses
 
-@Lenses case class Board(regions: List[Region]) {
+@Lenses case class Board(
+  regions: List[Region], 
+  tokens: Map[Token, Square],
+  edges: List[Edge]
+) {
   // Locate a region by a square that it contains.
   def regionOf(s: Square): Region = (regions find {_.squares contains s}).get
   // Locate a region by the coordinates of a square it contains.

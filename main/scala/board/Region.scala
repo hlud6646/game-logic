@@ -9,8 +9,8 @@ import monocle.macros.Lenses
   lifeStatus: LifeStatus    = LifeStatus.Alive
 ) {
   def +(that: Region): Region = Magma[Region].combine(this, that)
-  def tokens: List[Token] = squares flatMap {_.tokens}
-  def edges:   List[Edge] = squares flatMap {_.edges}
+  def tokens: List[Token] = ???
+  def edges:   List[Edge] = ???
 
   // // Spatial relations.
   // def <x(that: Region) = rcops.compareX(this, that)  < 0

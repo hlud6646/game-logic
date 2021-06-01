@@ -32,7 +32,7 @@ object Transformations {
 
   // Checkerboard pattern.  No idea what will happen if the board contains previous joins.
   private def colorByPredicate(p: Region => Boolean, c: Color)(b: Board): Board =
-    eachRegion.modify(r =>  if p(r) r else  r.focus(_.color).replace(c))(b)
+    eachRegion.modify(r =>  if (p(r)) r else  r.focus(_.color).replace(c))(b)
   def checker(b: Board) = colorByPredicate( parity(r.squares.head), Red )(b)
   def stripes(b: Board) = colorByPredicate( r.squares.head.y % 2 == 0, Red )(b)
   
