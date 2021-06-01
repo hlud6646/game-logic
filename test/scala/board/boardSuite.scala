@@ -177,9 +177,18 @@ class BoardSpecs extends Properties("Board") {
     forAll { (b: Board, y: Index) =>
       joinRow(y)(b).regions.size >= b.regions.size - 7
     }
+}
 
-  property("Horizontal reflection is an involution") = forAll { b: Board => reflectH(reflectH(b)) == b}
-  property("Vertical reflection is an involution") = forAll { b: Board => reflectV(reflectV(b)) == b}
-  property("Diagonal reflection is an involution") = forAll { b: Board => reflectD(reflectD(b)) == b}
+class InvolutoinSpecs extends Properties("Transformations") {
+  import Transformations._
+  import Generators._
+  implicit val arbBoard = Arbitrary(genBoard)
+  
+  def isInvolution(f: Board => Board) = forAll { b: Board => f(f(b)) == b }
+
+  property("Horizontal reflection is an involution") = isInvolution(reflectH)
+  property("Vertical reflection is an involution")   = isInvolution(reflectV)
+  property("Diagonal reflection is an involution")   = isInvolution(reflectD)
+  property("Rotate twice is an involution")          = isInvolution(b => (rotate(rotate(b))))
   
 }

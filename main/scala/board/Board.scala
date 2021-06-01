@@ -30,4 +30,5 @@ object Board {
 
   // Optics:
   val eachRegion = regions andThen Traversal.fromTraverse[List, Region]
+  val eachSquare = eachRegion andThen Region.eachSquare
 }
