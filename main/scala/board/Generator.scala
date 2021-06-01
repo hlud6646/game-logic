@@ -4,7 +4,7 @@ import util.Random.{ nextInt, nextBoolean }
 
 import Transformations._
 
-object Generator extends App {
+object Generator {
 
   // 1st attempt at board generation.
   
