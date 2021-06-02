@@ -4,7 +4,7 @@ import board._
 object Main extends App {
 
   type PlayerId = Int
-
+  type Move = Board => Board
 
   case class Game(
     // Fixed.
@@ -14,7 +14,12 @@ object Main extends App {
     // Evolving.
     boardState: Board, 
     toPlay: PlayerId
-    )
+    ) {
+      def legalMoves: Seq[Move] = ???
+      // Return a game representing the state after a given move is played.
+      def push(m: Move): Game = 
+        this.Focus(_.board).update(m(_)).Focus(_.toPlay).update(_.otherPlayer)
+    }
 
   // A fresh game.  The total-action and initial board chosen randomly.
   var g = Game(0, 1, Action.demoTotalAction, Board(), 0)
@@ -44,6 +49,12 @@ object Main extends App {
   /** The game data needs to be split into a match object and the existing game object. 
    *  A match contains the constant data across all games (e.g. player ids and rules)
    *  The game holds only that relevant to that game (obv),ie. board state, toPlay, legalMoveExists, result...
+   *
+   *  type Move = Board => Board
+   *  A 'move' in this game is a modification to the board state. We assume but do not require technically 
+   *  that this modification is small, e.g. placing a single token, not large e.g, removing all such at once.
+   *
+   *  A Game instance should have a push method that accepts a move, see broken code above.
    */
 
 
