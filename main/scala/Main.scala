@@ -1,23 +1,39 @@
-import board.{ Board, Player }
-import actions.Action._
-import actions.Input
+import Types._
+import board._
+import game._
 
 object Main extends App {
 
-  // @Lenses annotation here.
-  case class GameState(boardState: Board, toMove: Player) {
-    def push(m: Move) = GameState(m(boardState), toMove.otherPlayer)
+  // Board generator gives you an intial board: 
+  val initialBoard = Generator.randomBoard
+
+  
+  // Some action generating process gives you something like this.
+  val action: Input => Move = {
+    // Clicking a square makes it red.
+    case SelectSquare(xy) => Transformations.color(xy, Color.Red)
+    // Selecting two squares does nothing.
+    case SelectTwoSquares(_, _) => identity
+    // Dragging a token does???
+    case DragToken(_) => ???
+    // Clicking a token does???
+    case SelectToken(_) => ???
   }
 
-  // Act is not well named. It is the function Input => Move which declares what effect 
-  // an input should have on the game state.
-  type UserId = Int
-  case class GameInvariants(p1: UserId, p2: UserId, initialBoard: Board, act: Act)
+  // Mock data
+  val p1 = 123
+  val p2 = 456
 
-  case class Game(invariants: GameInvariants, state: GameState) {
-    def handleInput(i: Input) = {
-      val move = invariants.act(i)
-      Game(invariants, state.push(move))
-    }
-  }
+  // We have enough now to build a game.
+  val game = Game(
+    GameInvariants(p1, p2, initialBoard, action),
+    GameState(initialBoard, Player.P1)
+  )
+
+  // and can recieve a signal from somewhere and pass it in.
+  game.receiveInput(SelectSquare((2, 4)))
+
+  
+
+
 }
