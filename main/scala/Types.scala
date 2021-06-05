@@ -18,6 +18,9 @@ package object Types {
    */
   type XY = (Int, Int)
 
+  type T1 = Board => Board
+  type T2 = T1 => T1
+
   /** In natural language, when a player makes a 'move' in a game they modify the state
    *  of the board. A simple way to model this is then a function Board => Board.  This 
    *  assumes but does not actually require that the modification is small, like placing

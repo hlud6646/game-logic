@@ -6,19 +6,7 @@ object Main extends App {
 
   // Board generator gives you an intial board: 
   val initialBoard = Generator.randomBoard
-
-  
-  // Some action generating process gives you something like this.
-  val action: Input => Move = {
-    // Clicking a square makes it red.
-    case SelectSquare(xy) => Transformations.color(xy, Color.Red)
-    // Selecting two squares does nothing.
-    case SelectTwoSquares(_, _) => identity
-    // Dragging a token does???
-    case DragToken(_) => ???
-    // Clicking a token does???
-    case SelectToken(_) => ???
-  }
+  val action = Generator.randomAction
 
   // Mock data
   val p1 = 123
