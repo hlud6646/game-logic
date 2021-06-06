@@ -3,6 +3,7 @@ package board
 import org.scalacheck.{ Gen, Properties, Arbitrary }
 import org.scalacheck.Prop.{ forAll, propBoolean }
 
+import org.scalatest.Ignore
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.Checkers
 import org.typelevel.discipline.scalatest.FunSuiteDiscipline
@@ -30,14 +31,14 @@ object Generators {
   def genSquare = for {
     x <- Gen.choose(0, 7)
     y <- Gen.choose(0, 7)
-    tokens <- Gen.listOf(genToken)
-  } yield Square(x, y, tokens, Nil)
+  } yield Square(x, y)
 
   def genRegion = for {
     squares <- Gen.listOf(genSquare)
+    tokens  <- Gen.listOf(genToken)
     color   <- Gen.oneOf(Red, White)
     lstat   <- Gen.oneOf(Alive, Dead)
-  } yield Region(squares, color, lstat)
+  } yield Region(squares, tokens, color, lstat)
 
   def genBoard = Gen.const(Board())
 
@@ -88,12 +89,8 @@ class SquareSuite extends AnyFunSuite with Checkers {
 
   test("Test init square default args.") { Square(0, 0) }
   test("Test init square args given.") {
-    val t = genToken.sample.get :: Nil
-    val e = genEdge.sample.get :: Nil
-    Square(0, 2, t, e)
+    Square(0, 2)
   }
-  test("New square with default args has no tokens.") { Square(0, 0).tokens.isEmpty }
-  test("New square with default args has no edges.") { Square(0, 1).edges.isEmpty }
 }
 
 
@@ -124,9 +121,10 @@ class RegionSpecs extends Properties("Region") {
     (a: Region, b: Region) => Magma[Region].combine(a, b).tokens.size == a.tokens.size + b.tokens.size
   }
 
-  property("If you combine two regions, you get all their edges") = forAll {
-    (a: Region, b: Region) => Magma[Region].combine(a, b).edges.size == a.edges.size + b.edges.size
-  }
+  // property("If you combine two regions, you get all their edges") = forAll {
+  //   (a: Region, b: Region) => Magma[Region].combine(a, b).edges.size == a.edges.size + b.edges.size
+  // }
+  
 }
 
 object BoardInvariants {
@@ -179,7 +177,7 @@ class BoardSpecs extends Properties("Board") {
     }
 }
 
-class InvolutoinSpecs extends Properties("Transformations") {
+class InvolutionSpecs extends Properties("Transformations") {
   import Transformations._
   import Generators._
   implicit val arbBoard = Arbitrary(genBoard)
@@ -190,5 +188,17 @@ class InvolutoinSpecs extends Properties("Transformations") {
   property("Vertical reflection is an involution")   = isInvolution(reflectV)
   property("Diagonal reflection is an involution")   = isInvolution(reflectD)
   property("Rotate twice is an involution")          = isInvolution(b => (rotate(rotate(b))))
-  
+}
+
+
+class RandomBoardGenerationSpecs extends AnyFunSuite with Checkers {
+  test("After whatever happened, still not more than 64 regions.") {
+    val b = Generator.randomBoard
+    assert(b.regions.size <= 64)
+  }
+  test("After whatever happened, still exactly 64 squares.") {
+    val b = Generator.randomBoard
+    assert(b.regions.flatMap(_.squares).size == 64)
+  }
+
 }

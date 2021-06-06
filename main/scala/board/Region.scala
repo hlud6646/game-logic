@@ -5,11 +5,11 @@ import monocle.macros.Lenses
 
 @Lenses final case class Region(
   squares:    List[Square],
+  tokens:     List[Token]   = Nil,
   color:      Color         = Color.White,
   lifeStatus: LifeStatus    = LifeStatus.Alive
 ) {
   def +(that: Region): Region = Magma[Region].combine(this, that)
-  def tokens: List[Token] = ???
   def edges:   List[Edge] = ???
 
   // // Spatial relations.
@@ -30,6 +30,7 @@ object Region{
   implicit val regionMagma: Magma[Region] = 
     Magma.instance{ (r1, r2)  => Region(
       Magma[List[Square]].combine(r1.squares, r2.squares),
+      Magma[List[Token]].combine(r1.tokens, r2.tokens),
       Magma[Color].combine(r1.color, r2.color),
       Magma[LifeStatus].combine(r1.lifeStatus, r2.lifeStatus)
     )}

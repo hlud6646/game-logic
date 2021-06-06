@@ -6,7 +6,7 @@ import monocle.macros.Lenses
  */
 @Lenses case class Square(
   x: Int, 
-  y: Int
+  y: Int, 
 )
 
     ////Positional comparisons.

@@ -11,3 +11,7 @@ case class Token(
   def rotate = Token(animal, owner, (orientation + 1)%4)
   def flip(implicit fb: Token => Token) = fb(this)
   }
+
+object Token {
+  def newMonkey = Token(Some(Animal.M), None, 0)
+}

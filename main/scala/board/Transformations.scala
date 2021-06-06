@@ -1,12 +1,12 @@
 package board 
 
-import Color._
-
 import monocle.{ Focus, Traversal }
 import monocle.macros.GenLens
 import monocle.macros.syntax.all._
 
+import Types._
 import Color._
+import Token._
 
 /** Modifications to the state of the board are contained here.
  *  Note that none of the classes for smaller parts (region or square)
@@ -17,6 +17,14 @@ object Transformations {
   
   type T1 = Board => Board
   type T2 = T1 => T1
+
+  // Place a token.
+  def dropMonkey(xy: XY): T1 = (b: Board) => {
+    val idx = b.regions.indexWhere(_.squares.exists(s => s.x == xy._1 && s.y == xy._2))
+    b.focus(_.regions).index(idx)
+     .andThen(Focus[Region](_.tokens))
+     .modify(_.appended(newMonkey))
+  }
 
   // Join two regions.
   def join(x: Region, y: Region): T1 =   
