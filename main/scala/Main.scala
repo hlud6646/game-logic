@@ -15,13 +15,19 @@ object Main extends App {
   // We have enough now to build a game.
   val game = Game(
     GameInvariants(p1, p2, initialBoard, action),
-    GameState(initialBoard, Player.P1)
+    GameState(initialBoard, P1)
   )
 
   // and can recieve a signal from somewhere and pass it in.
   game.receiveInput(SelectSquare((2, 4)))
 
   
+
+
+
+  val b = Generator.randomBoard 
+  def f(r: Region) = r.squares.map(s => (s, None))
+  println(b.regions.flatMap(f).size)
 
 
 }

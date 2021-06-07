@@ -5,11 +5,9 @@ package board
 trait Player {
   def otherPlayer: Player
 }
-object Player {
-  case object P1 extends Player {
-    def otherPlayer = P2
-  }
-  case object P2 extends Player {
-    def otherPlayer = P1
-  }
+case object P1 extends Player {
+  def otherPlayer = P2
+}
+case object P2 extends Player {
+  def otherPlayer = P1
 }

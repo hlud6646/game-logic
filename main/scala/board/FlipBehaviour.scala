@@ -3,9 +3,6 @@ package board
 import monocle.Focus
 import monocle.macros.syntax.all._
 
-import Animal.{ A, R, M, E }
-
-
 object FlipBehaviour {
 
   def swapPairs(t: Token) = t.focus(_.animal).modify( _ match {

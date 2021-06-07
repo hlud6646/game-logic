@@ -5,4 +5,4 @@ package board
  *  A line can be dotted. This is represented as an optional Player: None
  *  means that it is not yet dotted. Some(p) means player p dotted it.
  */
-final case class Edge(to: Square, dotted: Option[Player], owner: Player)
+case class Edge(to: Square, dotted: Option[Player], owner: Player)

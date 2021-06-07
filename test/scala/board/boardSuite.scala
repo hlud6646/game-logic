@@ -108,7 +108,7 @@ class RegionSuite extends AnyFunSuite with Checkers {
 
 class RegionSpecs extends Properties("Region") {
   import Generators._
-  implicit val arbRegion: Arbitrary[Region] = Arbitrary(genRegion)
+  implicit def arbRegion: Arbitrary[Region] = Arbitrary(genRegion)
 
   // These checks are all a bit broken cause if you try to combine a region with itself, 
   // there should be no change.
@@ -188,6 +188,15 @@ class InvolutionSpecs extends Properties("Transformations") {
   property("Vertical reflection is an involution")   = isInvolution(reflectV)
   property("Diagonal reflection is an involution")   = isInvolution(reflectD)
   property("Rotate twice is an involution")          = isInvolution(b => (rotate(rotate(b))))
+}
+
+class RadomBoardSpecs extends  Properties("RandomBoard") {
+  import Generator._
+  implicit def arbBoard = Arbitrary(Gen.const(randomBoard))
+  def f(r: Region) = r.squares
+  property("Random board has exactly 64 squares") = forAll { b: Board => 
+    b.regions.flatMap(f).size == 64
+  }
 }
 
 

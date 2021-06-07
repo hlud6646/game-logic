@@ -3,7 +3,7 @@ package board
 import monocle.Traversal
 import monocle.macros.Lenses
 
-@Lenses final case class Region(
+@Lenses case class Region(
   squares:    List[Square],
   tokens:     List[Token]   = Nil,
   color:      Color         = Color.White,

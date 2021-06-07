@@ -13,5 +13,5 @@ case class Token(
   }
 
 object Token {
-  def newMonkey = Token(Some(Animal.M), None, 0)
+  def newMonkey = Token(Some(M), None, 0)
 }
