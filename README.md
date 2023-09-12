@@ -1,6 +1,5 @@
 # game
 
-For top level overview: ???
 
 This repo contains the underlying game logic, which can be broken down
 to the following sections:
